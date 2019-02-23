@@ -17,6 +17,7 @@ namespace Benefit.Models
         public float Rate { get; set; }
         public int SearchRadius { get; set; }
         public bool IsTrainer { get; set; }
+        public int[] SportCategories { get; set; }
 
         public User(string _email, string _firstName, string _lastName, string _password, string _gender, DateTime _dateOfBirth, string _picture, float _rate, int _searchRadius, bool _isTrainer)
         {
@@ -37,12 +38,18 @@ namespace Benefit.Models
             
         }
 
-        public int insert()
+        public int SignInTrainer(Trainer t)
         {
             DBservices dbs = new DBservices();
-            int numAffected = dbs.insert(this);
-            return numAffected;
+            int UserCode = dbs.SignInTrainer(t);
+            return UserCode;
         }
-        
+
+        public int SignInTrainee(Trainee t)
+        {
+            DBservices dbs = new DBservices();
+            int UserCode = dbs.SignInTrainee(t);
+            return UserCode;
+        }
     }
 }
