@@ -12,14 +12,14 @@ namespace Benefit.Models
         public string LastName { get; set; }
         public string Password { get; set; }
         public string Gender { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
         public string Picture { get; set; }
         public float Rate { get; set; }
         public int SearchRadius { get; set; }
-        public bool IsTrainer { get; set; }
+        public int IsTrainer { get; set; }
         public int[] SportCategories { get; set; }
 
-        public User(string _email, string _firstName, string _lastName, string _password, string _gender, DateTime _dateOfBirth, string _picture, float _rate, int _searchRadius, bool _isTrainer)
+        public User(string _email, string _firstName, string _lastName, string _password, string _gender, string _dateOfBirth, string _picture, int _searchRadius, int _isTrainer, int[] _sportCategories , float _rate = 0)
         {
             Email = _email;
             FirstName = _firstName;
@@ -31,6 +31,7 @@ namespace Benefit.Models
             Rate = _rate;
             SearchRadius = _searchRadius;
             IsTrainer = _isTrainer;
+            SportCategories = _sportCategories;
         }
 
         public User()
@@ -38,18 +39,7 @@ namespace Benefit.Models
             
         }
 
-        public int SignInTrainer(Trainer t)
-        {
-            DBservices dbs = new DBservices();
-            int UserCode = dbs.SignInTrainer(t);
-            return UserCode;
-        }
 
-        public int SignInTrainee(Trainee t)
-        {
-            DBservices dbs = new DBservices();
-            int UserCode = dbs.SignInTrainee(t);
-            return UserCode;
-        }
+        
     }
 }
