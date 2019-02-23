@@ -29,19 +29,7 @@ namespace WebApplication1.Models
         }
         public Person(string _name, string _familyName, string _gender, double _age, double _height, string _image, string _address, int[] _hobbies, string _phone, int _isPremium, string _password, string _email, int _isActive = 0) {
 
-            Name = _name;
-            FamilyName = _familyName;
-            Gender = _gender;
-            Age = _age;
-            Height = _height;
-            Address = _address;
-            Image = " ";
-            Hobbies = _hobbies;
-            IsActive = _isActive;
-            IsPremium = _isPremium;
-            Phone = _phone;
-            Email = _email;
-            Password = _password;
+        
             
         }
         public int insert()
