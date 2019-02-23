@@ -7,9 +7,9 @@ namespace WebApplication1.Models
 {
     public class Person
     {
-        
+		public string Email { get; set; }
 
-        public Person()
+		public Person()
         {
 
         }
