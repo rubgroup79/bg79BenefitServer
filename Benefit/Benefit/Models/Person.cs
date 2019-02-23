@@ -7,21 +7,7 @@ namespace WebApplication1.Models
 {
     public class Person
     {
-
-        public string Name { get; set; }
-        public string FamilyName { get; set; }
-        public string Gender { get; set; }
-        public double Age { get; set; }
-        public double Height { get; set; }
-        public string Image { get; set; }
-        public string Address { get; set; }
-        public int[] Hobbies { get; set; }
-        public string Phone { get; set; }
-        public int IsActive { get; set; }
-        public int IsPremium { get; set; }
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        
 
         public Person()
         {
