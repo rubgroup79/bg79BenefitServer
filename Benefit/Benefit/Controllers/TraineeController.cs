@@ -24,6 +24,14 @@ namespace Benefit.Controllers
            return t.SignInTrainee();
         }
 
+        [HttpGet]
+        [Route("api/test")]
+        public bool test([FromBody]Trainee t)
+        {
+            return true;
+        }
+
+
 
     }
 }
