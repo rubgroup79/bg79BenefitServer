@@ -178,6 +178,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\BenefitSystemController.cs" />
     <Compile Include="Controllers\TrainerController.cs" />
     <Compile Include="Controllers\TraineeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -185,16 +186,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BenefitSystem.cs" />
+    <Compile Include="Models\CurrentOnlineTrainer.cs" />
+    <Compile Include="Models\CoupleTraining.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Chat.cs" />
-    <Compile Include="Models\Request.cs" />
-    <Compile Include="Models\Suggestion.cs" />
-    <Compile Include="Models\RatingParameter.cs" />
+    <Compile Include="Models\CurrentOnlineTrainee.cs" />
+    <Compile Include="Models\OnlineHistory.cs" />
+    <Compile Include="Models\OnlineHistoryTrainer.cs" />
+    <Compile Include="Models\CoupleTrainingSuggestion.cs" />
+    <Compile Include="Models\SportCategory.cs" />
+    <Compile Include="Models\RateParameter.cs" />
+    <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\ParameterRate.cs" />
     <Compile Include="Models\Rating.cs" />
-    <Compile Include="Models\TrainerActivity.cs" />
-    <Compile Include="Models\TraineeActivity.cs" />
-    <Compile Include="Models\Activity.cs" />
-    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\OnlineHistoryTrainee.cs" />
+    <Compile Include="Models\GroupTraining.cs" />
     <Compile Include="Models\Training.cs" />
     <Compile Include="Models\Trainer.cs" />
     <Compile Include="Models\Trainee.cs" />
@@ -235,6 +242,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Web.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

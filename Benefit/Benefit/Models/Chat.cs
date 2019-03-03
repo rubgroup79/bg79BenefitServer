@@ -7,6 +7,7 @@ namespace Benefit.Models
 {
     public class Chat
     {
+        public int ChatCode { get; set; }
         public int UserCode1 { get; set; }
         public int UserCode2 { get; set; }
 

@@ -7,6 +7,7 @@ namespace Benefit.Models
 {
     public class Rating
     {
+        public int RatingCode { get; set; }
         public int TraineeCode { get; set; }
         public int RatedCode { get; set; }
  

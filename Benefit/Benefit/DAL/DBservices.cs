@@ -161,7 +161,90 @@ public class DBservices
 
     }
 
-    
+    public bool CheckIfEmailExists(string UserEmail)
+    {
+
+        SqlConnection con = null;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            String selectSTR = "select * from Users where Users.Email='" + UserEmail + "'";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+            
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); 
+
+            if (dr.Read())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+
+        }
+
+    }
+
+
+    public Trainee CheckIfPasswordMatches(string UserEmail, string Password)
+    {
+
+        SqlConnection con = null;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            String selectSTR = "select Users.UserCode, Users.IsTrainer from Users where Users.Email='"+UserEmail+"' and Users.Password= '" + Password + "'";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            Trainee t = new Trainee();
+            if (dr.Read())
+            {
+                
+                t.UserCode = Convert.ToInt32(dr["UserCode"]);
+                t.IsTrainer = Convert.ToInt32(dr["IsTrainer"]);
+                return t;
+            }
+            else
+            {
+                t.UserCode = 0;
+                return t;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+
+        }
+
+    }
+
+
 
 
 
@@ -196,7 +279,7 @@ public class DBservices
         String command;
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendFormat("Values({0},{1},{2},{3},{4})", UserCode.ToString(), t.PersonalTrainingPrice.ToString(), t.GroupTrainingPrice.ToString());
+        sb.AppendFormat("Values({0},{1},{2})", UserCode.ToString(), t.PersonalTrainingPrice.ToString(), t.GroupTrainingPrice.ToString());
         String prefix = "INSERT INTO Trainers (TrainerCode, PersonalTrainingPrice, GroupTrainingPrice) ";
         command = prefix + sb.ToString();
         return command;

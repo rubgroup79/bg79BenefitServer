@@ -7,6 +7,7 @@ namespace Benefit.Models
 {
     public class Message
     {
+        public int MessageCode { get; set; }
         public int ChatCode { get; set; }
         public int SenderCode { get; set; }
         public DateTime Date { get; set; }

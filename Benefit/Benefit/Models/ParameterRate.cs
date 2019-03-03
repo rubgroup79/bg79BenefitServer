@@ -5,14 +5,14 @@ using System.Web;
 
 namespace Benefit.Models
 {
-    public class RatingParameter
+    public class ParameterRate
     {
         public int RatingCode { get; set; }
         public int ParameterCode { get; set; }
         public float Rate { get; set; }
  
 
-        public RatingParameter(int _ratingCode, int _parameterCode, float _rate)
+        public ParameterRate(int _ratingCode, int _parameterCode, float _rate)
         {
             RatingCode = _ratingCode;
             ParameterCode = _parameterCode;
