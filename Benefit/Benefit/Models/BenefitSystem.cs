@@ -25,5 +25,10 @@ namespace Benefit.Models
             return dbs.CheckIfPasswordMatches(UserEmail, Password);
         }
 
+        //public List<User> SearchPartners(CurrentOnlineTrainee o)
+        //{
+        //    DBservices dbs = new DBservices();
+        //    return dbs.SearchPartners(o);
+        //}
     }
 }

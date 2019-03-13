@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Benefit.Models
 {
-    public abstract class User
+    public class User
     {
         public int UserCode { get; set; }
         public string Email { get; set; }

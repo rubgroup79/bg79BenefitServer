@@ -26,7 +26,6 @@ namespace Benefit.Controllers
 
 
         }
-
         
 
         [HttpPost]
@@ -38,14 +37,14 @@ namespace Benefit.Controllers
 
 
         }
+        
 
-        [HttpPost]
-        [Route("api/CheckIfPasswordMatches1")]
-        public string CheckIfPasswordMatches1()
-        {
-            return "testebefbfb";
-
-
-        }
+        //[HttpGet]
+        //[Route("api/SearchPartners")]
+        //public IEnumerable<User> SearchPartners([FromBody]CurrentOnlineTrainee o)
+        //{
+        //    BenefitSystem s = new BenefitSystem();
+        //    return s.SearchPartners(o);
+        //}
     }
 }

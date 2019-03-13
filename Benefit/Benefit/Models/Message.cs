@@ -10,16 +10,14 @@ namespace Benefit.Models
         public int MessageCode { get; set; }
         public int ChatCode { get; set; }
         public int SenderCode { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime SendingTime { get; set; }
         public string Content { get; set; }
 
-        public Message(int _chatCode , int _senderCode, DateTime _date, DateTime _time, string _content)
+        public Message(int _chatCode , int _senderCode, DateTime _sendingTime, string _content)
         {
             ChatCode = _chatCode;
             SenderCode = _senderCode;
-            Date = _date;
-            Time = _time;
+            SendingTime = _sendingTime;
             Content = _content;
             
         }

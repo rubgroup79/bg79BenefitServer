@@ -9,18 +9,16 @@ namespace Benefit.Models
     {
         public int OnlineCode { get; set; }
         public int UserCode { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime Time { get; set; }
+        public string InsertTime { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public OnlineHistory( int _userCode, DateTime _date, DateTime _time, string _latitude, string _longitude, DateTime _startTime, DateTime _endTime)
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public OnlineHistory( int _userCode, string _insertTime, string _latitude, string _longitude, string _startTime, string _endTime)
         {
             
             UserCode = _userCode;
-            Date = _date;
-            Time = _time;
+            InsertTime = _insertTime;
             Latitude = _latitude;
             Longitude = _longitude;
             StartTime = _startTime;
