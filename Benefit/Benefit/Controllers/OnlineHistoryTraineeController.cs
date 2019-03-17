@@ -19,7 +19,7 @@ namespace Benefit.Controllers
 
         [HttpPost]
         [Route("api/InsertOnlineTrainee")]
-        public IEnumerable<Trainee> InsertOnlineTrainee([FromBody]OnlineHistoryTrainee o)
+        public IEnumerable<Result> InsertOnlineTrainee([FromBody]OnlineHistoryTrainee o)
         {
            return o.InsertOnlineTrainee(o);
         }
