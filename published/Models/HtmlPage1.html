@@ -11,88 +11,163 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <!--<link href="../Style.css" rel="stylesheet" />-->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
-   
+
 
     <script>
 
+
+
         $(document).ready(function () {
 
+            //--------------------------------------------------------------------
+            // ADD TRAINEE
+            //--------------------------------------------------------------------
             //Trainee = {
-            //    Email: "stav@gmail.com",
-            //    FirstName: "stav",
-            //    LastName: "sha",
+            //    Email: "meidan@gmail.com",
+            //    FirstName: "meidan",
+            //    LastName: "weiss",
             //    Password: "12345",
-            //    Gender: "Female",
-            //    DateOfBirth: "date",
+            //    Gender: "Male",
+            //    DateOfBirth: "1991-09-27",
             //    Picture: "fdfd",
-            //    SearchRadius: 5,
+            //    SearchRadius: 20,
             //    IsTrainer: 0,
-            //    SportCategories: [1, 2, 3],
+            //    SportCategories: [2,3],
             //    MinBudget: 100,
-            //    MaxBudget: 200,
-            //    PartnerGender: "Male",
-            //    TrainerGender: "Female"
+            //    MaxBudget: 350,
+            //    PartnerGender: "Female",
+            //    TrainerGender: "Male",
+            //    MinPartnerAge: 23,
+            //    MaxPartnerAge:28
+
             //}
             //obj = JSON.stringify(Trainee);
             //console.log(obj);
             //ajaxCall("POST", "../api/InsertTrainee", obj, success1, error);
 
-            str = {
-                UserEmail: "stav@gmail.com"
+            //str = {
+            //    UserEmail: "stav@gmail.com"
+            //}
+            //ajaxCall("GET", "../api/CheckIfEmailExists", str, success1, error);
+            
+            //--------------------------------------------------------------------
+            // ADD TRAINER
+            //--------------------------------------------------------------------
+                //Trainer = {
+                //    Email: "noam@gmail.com",
+                //    FirstName: "noam",
+                //    LastName: "sharon",
+                //    Password: "12345",
+                //    Gender: "Male",
+                //    DateOfBirth: "1992-10-16",
+                //    Picture: "11111",
+                //    SearchRadius: 8,
+                //    IsTrainer: 1,
+                //    SportCategories: [1, 2],
+                //    PersonalTrainingPrice: 200,
+                //    GroupTrainingPrice: 80
+                //}
+                //obj = JSON.stringify(Trainer);
+                //console.log(obj);
+                //ajaxCall("POST", "../api/InsertTrainer", obj, success1, error);
+            
+            //--------------------------------------------------------------------
+            // ADD ONLINE TRAINEE
+            //--------------------------------------------------------------------
+
+            onlinehistorytrainee = {
+                UserCode: 1,
+                Latitude: "32.360869",
+                Longitude: "34.862154",
+                StartTime: "2019-03-16 08:00:00.123",
+                Endtime: "2019-03-16 12:00:00.123" ,
+                WithTrainer: 0,
+                WithPartner: 0,
+                GroupWithTrainer: 1,
+                GroupWithPartners: 0
             }
-            ajaxCall("GET", "../api/CheckIfEmailExists", str, success, error);
 
-           
-            //    Trainer = {
-            //        Email: "noam@gmail.com",
-            //        FirstName: "noam",
-            //        LastName: "sha",
-            //        Password: "12345",
-            //        Gender: "Female",
-            //        DateOfBirth: "dateofbirth",
-            //        Picture: "11111",
-            //        SearchRadius: 8,
-            //        IsTrainer: 0,
-            //        SportCategories: [1, 2],
-            //        PersonalTrainingPrice: 100,
-            //        GroupTrainingPrice: 80
-            //    }
-            //    obj = JSON.stringify(Trainer);
-            //    console.log(obj);
-            //    ajaxCall("POST", "../api/InsertTrainer", obj, success, error);
-        //}
+            obj = JSON.stringify(onlinehistorytrainee);
+            console.log(obj);
+            ajaxCall("POST", "../api/InsertOnlineTrainee", obj, successInsertOnline, error);
+            ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline, error);
+
+            //--------------------------------------------------------------------
+            // ADD ONLINE TRAINER
+            //--------------------------------------------------------------------
+
+        //    OnlineHistoryTrainer = {
+        //        UserCode: 4,
+        //        Latitude: "32.328673",
+        //        Longitude: "34.906768",
+        //        StartTime: "2019-03-16 09:00:29.123",
+        //        EndTime: "2019-03-16 09:30:29.123"
+        //    }
+
+        //    obj = JSON.stringify(OnlineHistoryTrainer);
+        //    console.log(obj);
+        //    ajaxCall("POST", "../api/InsertOnlineTrainer", obj, successInsertOnline, error);
 
 
+
+            //--------------------------------------------------------------------
+            // ADD Group
+            //--------------------------------------------------------------------
+
+        //    HistoryGroupTraining = {
+        //        TrainingTime: "2019 - 03 - 16 08: 00: 00.123",
+        //        Latitude: "32.360869",
+        //        Longitude: "34.862154",
+        //        WithTrainer: 1,
+        //        CreatorCode: 4,
+        //        MinParticipants: 2,
+        //        MaxParticipants: 8,
+        //        StatusCode: 1,
+        //        SportCategoryCode: 1,
+        //        Price: 150
+        //    }
+
+        //    obj = JSON.stringify(HistoryGroupTraining);
+        //    console.log(obj);
+        //    ajaxCall("POST", "../api/InsertGroupTraining", obj, successInsertOnline, error);
         });
+
+
+
+        function successInsertOnline(data) {
+            console.log(data);
+        }
+
         function success1(data) {
             alert(data);
         }
+        
         function success(data) {
             console.log(data);
             if (data) {
                 trainee = {
-                Email: "stav@gmail.com",
-                Password: "12345"
+                    Email: "stav@gmail.com",
+                    Password: "12345"
+                }
+                ajaxCall("POST", "../api/CheckIfPasswordMatches", JSON.stringify(trainee), successPassword, error);
             }
-            ajaxCall("POST", "../api/CheckIfPasswordMatches", JSON.stringify(trainee), successPassword, error);
-            }
-        
+
             else {
-            alert("user not exists");
+                alert("user not exists");
             }
         }
 
         function successPassword(data) {
-            if (data!=0)
+            if (data != 0)
                 alert(data);
             else alert("incorrect password")
 
-        } 
+        }
 
         function error(err) {
-                console.log(err);
-            }
-                
+            console.log(err);
+        }
+
 
     </script>
 </head>
