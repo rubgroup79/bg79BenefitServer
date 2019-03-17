@@ -27,7 +27,11 @@ namespace Benefit.Models
             return dbs.InsertOnlineTrainee(o);
         }
 
-
+        public List<HistoryGroupTraining> SearchGroups(OnlineHistoryTrainee o)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.SearchGroups(o);
+        }
 
     }
 }

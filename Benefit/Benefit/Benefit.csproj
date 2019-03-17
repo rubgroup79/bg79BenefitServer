@@ -180,6 +180,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BenefitSystemController.cs" />
     <Compile Include="Controllers\OnlineHistoryTrainerController.cs" />
+    <Compile Include="Controllers\HistoryGroupTrainingController.cs" />
     <Compile Include="Controllers\OnlineHistoryTraineeController.cs" />
     <Compile Include="Controllers\TrainerController.cs" />
     <Compile Include="Controllers\TraineeController.cs" />
@@ -204,7 +205,7 @@
     <Compile Include="Models\ParameterRate.cs" />
     <Compile Include="Models\Rating.cs" />
     <Compile Include="Models\OnlineHistoryTrainee.cs" />
-    <Compile Include="Models\GroupTraining.cs" />
+    <Compile Include="Models\HistoryGroupTraining.cs" />
     <Compile Include="Models\Training.cs" />
     <Compile Include="Models\Trainer.cs" />
     <Compile Include="Models\Trainee.cs" />

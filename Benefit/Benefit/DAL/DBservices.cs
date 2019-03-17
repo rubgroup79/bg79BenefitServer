@@ -239,7 +239,7 @@ public class DBservices
 
     }
 
-    +public List<Result> SearchPartners(OnlineHistoryTrainee o)
+    public List<Result> SearchPartners(OnlineHistoryTrainee o)
     {
 
         SqlConnection con = null;
@@ -462,6 +462,99 @@ public class DBservices
 
     }
 
+    public List<HistoryGroupTraining> SearchGroups(OnlineHistoryTrainee o)
+    {
+
+        SqlConnection con = null;
+        SqlConnection con1 = null;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            //Get trainee's details that needed for the search
+            String selectSTR = "select U.SearchRadius, T.MinBudget, T.MaxBudget, USC.CategoryCode from Users as U inner join Trainees as T on U.UserCode = T.TraineeCode inner join UserSportCategories as USC on U.UserCode = USC.UserCode where U.UserCode = '" + o.UserCode + "'";
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            List<int> scl = new List<int>();
+            int search_SearchRadius = 0;
+            int search_MinBudget = 0;
+            int search_MaxBudget = 0;
+
+            while (dr.Read())
+            {
+                search_SearchRadius = Convert.ToInt32(dr["SearchRadius"]);
+                search_MinBudget = Convert.ToInt32(dr["MinBudget"]);
+                search_MaxBudget = Convert.ToInt32(dr["MaxBudget"]);
+                int sc = Convert.ToInt32(dr["CategoryCode"]);
+                scl.Add(sc);
+            }
+            
+            string sportCategoriesStr = "and (HGT.SportCategoryCode = " + scl[0];
+            for (int i = 1; i < scl.Count; i++)
+            {
+                sportCategoriesStr += " or HGT.SportCategoryCode = " + scl[i];
+            }
+            sportCategoriesStr += ") ";
+
+            string GruopWith = null;
+            if (o.GroupWithPartners == 1 && o.GroupWithTrainer == 1)
+                GruopWith = " (HGT.Price between " + search_MinBudget + " and " + search_MaxBudget + ")";
+            else if (o.GroupWithPartners == 1)
+                GruopWith = " HGT.WithTrainer=0 ";
+            else GruopWith = " HGT.WithTrainer=1 and (HGT.Price between " + search_MinBudget + " and " + search_MaxBudget + ")";
+            
+            con1 = connect("BenefitConnectionStringName");
+
+            selectSTR = "select distinct AGT.GroupTrainingCode, HGT.Latitude, HGT.Longitude, HGT.TrainingTime, HGT.MaxParticipants, HGT.CurrentParticipants, HGT.SportCategoryCode, HGT.Price, HGT.WithTrainer " +
+                "from HistoryGroupTraining as HGT inner join ActiveGroupTraining as AGT on HGT.GroupTrainingCode = AGT.GroupTrainingCode " +
+                "where " + GruopWith+
+                " and( HGT.TrainingTime between '" + o.StartTime + "' and '" + o.EndTime + "') " +
+                sportCategoriesStr;
+
+            SqlCommand cmd1 = new SqlCommand(selectSTR, con1);
+            SqlDataReader dr1 = cmd1.ExecuteReader(CommandBehavior.CloseConnection);
+            List<HistoryGroupTraining> gtl = new List<HistoryGroupTraining>();
+
+            while (dr1.Read())
+            {
+                double group_Longitude = Convert.ToDouble(dr1["Longitude"]);
+                double group_Latitude = Convert.ToDouble(dr1["Latitude"]);
+                double distance = distances(group_Latitude, group_Longitude, Convert.ToDouble(o.Latitude), Convert.ToDouble(o.Longitude), 'K');
+                if ((distance <= search_SearchRadius))
+                {
+                    HistoryGroupTraining hgt = new HistoryGroupTraining();
+                    hgt.Longitude = Convert.ToString(group_Longitude);
+                    hgt.Latitude = Convert.ToString(group_Latitude);
+                    hgt.TrainingCode = Convert.ToInt32(dr1["GroupTrainingCode"]);
+                    hgt.TrainingTime = Convert.ToString(dr1["TrainingTime"]);
+                    hgt.Price = Convert.ToInt32(dr1["Price"]);
+                    hgt.WithTrainer= Convert.ToInt32(dr1["WithTrainer"]);
+                    gtl.Add(hgt);
+                }
+
+            }
+            return gtl;
+
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
     private double distances(double lat1, double lon1, double lat2, double lon2, char unit)
     {
         if ((lat1 == lat2) && (lon1 == lon2))
@@ -533,6 +626,7 @@ public class DBservices
         {
             throw (ex);
         }
+
         con2 = connect("BenefitConnectionStringName");
         String pStr2 = BuildInsertOnlineHistoryTraineeCommand(o);
         cmd2 = CreateCommand(pStr2, con2);
@@ -637,6 +731,39 @@ public class DBservices
 
     }
 
+    public void InsertGroupTraining(HistoryGroupTraining h)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlConnection con1;
+        SqlCommand cmd1;
+
+        con = connect("BenefitConnectionStringName");
+        try
+        {
+            String pStr = BuildInsertHistoryGroupTrainingCommand(h);
+            cmd = CreateCommand(pStr, con);
+            int HistoryGroupTrainingCode = Convert.ToInt32(cmd.ExecuteScalar());
+            con1 = connect("BenefitConnectionStringName");
+            String pStr1 = BuildInsertActiveGroupTrainingCommand(HistoryGroupTrainingCode);
+            cmd1 = CreateCommand(pStr1, con1);
+            cmd1.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+        
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
     //--------------------------------------------------------------------
     // Build the Insert command String
     //--------------------------------------------------------------------
@@ -667,8 +794,8 @@ public class DBservices
         String command;
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendFormat("Values({0},{1},{2})", UserCode.ToString(), t.PersonalTrainingPrice.ToString(), t.GroupTrainingPrice.ToString());
-        String prefix = "INSERT INTO Trainers (TrainerCode, PersonalTrainingPrice, GroupTrainingPrice) ";
+        sb.AppendFormat("Values({0},{1})", UserCode.ToString(), t.PersonalTrainingPrice.ToString());
+        String prefix = "INSERT INTO Trainers (TrainerCode, PersonalTrainingPrice) ";
         command = prefix + sb.ToString();
         return command;
     }
@@ -727,8 +854,28 @@ public class DBservices
         return command;
     }
 
+    private String BuildInsertHistoryGroupTrainingCommand(HistoryGroupTraining h)
+    {
+        String command;
+        StringBuilder sb = new StringBuilder();
 
+        sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},{5},{6},{7},{8},{9},{10})",h.TrainingTime, h.Latitude, h.Longitude, h.WithTrainer.ToString(), h.CreatorCode.ToString(), h.MinParticipants.ToString(), h.MaxParticipants.ToString(), h.CurrentParticipants.ToString(), h.StatusCode.ToString(), h.SportCategoryCode.ToString(), h.Price.ToString());
+        String prefix = "INSERT INTO HistoryGroupTraining (TrainingTime, Latitude, Longitude, WithTrainer, CreatorCode, MinParticipants, MaxParticipants, CurrentParticipants, StatusCode,SportCategoryCode, Price ) output INSERTED.GroupTrainingCode  ";
+        command = prefix + sb.ToString();
+        return command;
+    }
 
+    private String BuildInsertActiveGroupTrainingCommand(int HistoryGroupTrainingCode)
+    {
+        String command;
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendFormat("Values({0})", HistoryGroupTrainingCode.ToString());
+        String prefix = "INSERT INTO ActiveGroupTraining (GroupTrainingCode) ";
+        command = prefix + sb.ToString();
+        return command;
+    }
+    
     //---------------------------------------------------------------------------------
     // Create the SqlCommand
     //---------------------------------------------------------------------------------
