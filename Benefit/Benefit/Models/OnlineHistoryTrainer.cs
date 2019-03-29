@@ -8,7 +8,7 @@ namespace Benefit.Models
     public class OnlineHistoryTrainer : OnlineHistory
     {
 
-        public OnlineHistoryTrainer( int _userCode, string _latitude, string _longitude, string _startTime, string _endTime)
+        public OnlineHistoryTrainer( int _userCode, float _latitude, float _longitude, string _startTime, string _endTime)
             :base(_userCode, _latitude, _longitude, _startTime, _endTime)
         {
             

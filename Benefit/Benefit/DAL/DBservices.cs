@@ -322,12 +322,13 @@ public class DBservices
                     rt.LastName = Convert.ToString(dr1["LastName"]);
                     rt.Age = Convert.ToInt32(dr1["Age"]);
                     rt.Gender = Convert.ToString(dr1["Gender"]);
-                    rt.Longitude = Convert.ToString(result_Longitude);
-                    rt.Latitude = Convert.ToString(result_Latitude);
+                    rt.Longitude = Convert.ToSingle(result_Longitude);
+                    rt.Latitude = Convert.ToSingle(result_Latitude);
                     rt.StartTime = Convert.ToString(dr1["StartTime"]);
                     rt.EndTime = Convert.ToString(dr1["EndTime"]);
                     rt.Picture = Convert.ToString(dr1["Picture"]);
                     rt.IsTrainer = Convert.ToInt32(dr1["IsTrainer"]);
+                    rt.Distance = distance;
                     tl.Add(rt);
                     
                 }
@@ -431,13 +432,14 @@ public class DBservices
                     rt.LastName = Convert.ToString(dr1["LastName"]);
                     rt.Age = Convert.ToInt32(dr1["Age"]);
                     rt.Gender = Convert.ToString(dr1["Gender"]);
-                    rt.Longitude = Convert.ToString(result_Longitude);
-                    rt.Latitude = Convert.ToString(result_Latitude);
+                    rt.Longitude = Convert.ToSingle(result_Longitude);
+                    rt.Latitude = Convert.ToSingle(result_Latitude);
                     rt.StartTime = Convert.ToString(dr1["StartTime"]);
                     rt.EndTime = Convert.ToString(dr1["EndTime"]);
                     rt.Picture = Convert.ToString(dr1["Picture"]);
                     rt.Price = Convert.ToInt32(dr1["PersonalTrainingPrice"]);
                     rt.IsTrainer = Convert.ToInt32(dr1["IsTrainer"]);
+                    rt.Distance = distance;
                     tl.Add(rt);
 
                 }
@@ -520,14 +522,14 @@ public class DBservices
 
             while (dr1.Read())
             {
-                double group_Longitude = Convert.ToDouble(dr1["Longitude"]);
-                double group_Latitude = Convert.ToDouble(dr1["Latitude"]);
+                double group_Longitude = Convert.ToSingle(dr1["Longitude"]);
+                double group_Latitude = Convert.ToSingle(dr1["Latitude"]);
                 double distance = distances(group_Latitude, group_Longitude, Convert.ToDouble(o.Latitude), Convert.ToDouble(o.Longitude), 'K');
                 if ((distance <= search_SearchRadius))
                 {
                     HistoryGroupTraining hgt = new HistoryGroupTraining();
-                    hgt.Longitude = Convert.ToString(group_Longitude);
-                    hgt.Latitude = Convert.ToString(group_Latitude);
+                    hgt.Longitude = Convert.ToSingle(group_Longitude);
+                    hgt.Latitude = Convert.ToSingle(group_Latitude);
                     hgt.TrainingCode = Convert.ToInt32(dr1["GroupTrainingCode"]);
                     hgt.TrainingTime = Convert.ToString(dr1["TrainingTime"]);
                     hgt.Price = Convert.ToInt32(dr1["Price"]);
@@ -815,7 +817,7 @@ public class DBservices
     {
         String command;
         StringBuilder sb = new StringBuilder();
-        sb.AppendFormat("Values({0},{1},'{2}','{3}','{4}', '{5}', {6}, {7}, {8}, {9} )", o.UserCode.ToString(), "getdate()" , o.Latitude, o.Longitude, o.StartTime, o.EndTime, o.WithTrainer.ToString(), o.WithPartner.ToString(), o.GroupWithTrainer.ToString(), o.GroupWithPartners.ToString());
+        sb.AppendFormat("Values({0},{1},{2},{3},'{4}', '{5}', {6}, {7}, {8}, {9} )", o.UserCode.ToString(), "getdate()" , o.Latitude.ToString(), o.Longitude.ToString(), o.StartTime, o.EndTime, o.WithTrainer.ToString(), o.WithPartner.ToString(), o.GroupWithTrainer.ToString(), o.GroupWithPartners.ToString());
         String prefix = "INSERT INTO OnlineHistoryTrainee (TraineeCode, InsertTime, Latitude, Longitude, StartTime, EndTime, WithTrainer,WithPartner, GroupWithTrainer, GroupWithPartners) output INSERTED.OnlineCode  ";
         command = prefix + sb.ToString();
         return command;
@@ -837,7 +839,7 @@ public class DBservices
         String command;
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendFormat("Values({0},{1},'{2}','{3}','{4}', '{5}')", o.UserCode.ToString(), "getdate()", o.Latitude, o.Longitude, o.StartTime, o.EndTime);
+        sb.AppendFormat("Values({0},{1},{2},{3},'{4}', '{5}')", o.UserCode.ToString(), "getdate()", o.Latitude.ToString(), o.Longitude.ToString(), o.StartTime, o.EndTime);
         String prefix = "INSERT INTO OnlineHistoryTrainer (TrainerCode, InsertTime, Latitude, Longitude, StartTime, EndTime) output INSERTED.OnlineCode  ";
         command = prefix + sb.ToString();
         return command;
@@ -859,7 +861,7 @@ public class DBservices
         String command;
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},{5},{6},{7},{8},{9},{10})",h.TrainingTime, h.Latitude, h.Longitude, h.WithTrainer.ToString(), h.CreatorCode.ToString(), h.MinParticipants.ToString(), h.MaxParticipants.ToString(), h.CurrentParticipants.ToString(), h.StatusCode.ToString(), h.SportCategoryCode.ToString(), h.Price.ToString());
+        sb.AppendFormat("Values('{0}',{1},{2},{3},{4},{5},{6},{7},{8},{9},{10})",h.TrainingTime, h.Latitude.ToString(), h.Longitude.ToString(), h.WithTrainer.ToString(), h.CreatorCode.ToString(), h.MinParticipants.ToString(), h.MaxParticipants.ToString(), h.CurrentParticipants.ToString(), h.StatusCode.ToString(), h.SportCategoryCode.ToString(), h.Price.ToString());
         String prefix = "INSERT INTO HistoryGroupTraining (TrainingTime, Latitude, Longitude, WithTrainer, CreatorCode, MinParticipants, MaxParticipants, CurrentParticipants, StatusCode,SportCategoryCode, Price ) output INSERTED.GroupTrainingCode  ";
         command = prefix + sb.ToString();
         return command;

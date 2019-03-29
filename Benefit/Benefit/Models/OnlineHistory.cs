@@ -9,11 +9,11 @@ namespace Benefit.Models
     {
         public int OnlineCode { get; set; }
         public int UserCode { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        public float Latitude { get; set; }
+        public float Longitude { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
-        public OnlineHistory( int _userCode,  string _latitude, string _longitude, string _startTime, string _endTime)
+        public OnlineHistory( int _userCode, float _latitude, float _longitude, string _startTime, string _endTime)
         {
             
             UserCode = _userCode;

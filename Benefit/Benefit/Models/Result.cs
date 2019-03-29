@@ -12,14 +12,16 @@ namespace Benefit.Models
         public string LastName { get; set; }
         public string Gender { get; set; }
         public int Age { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        public float Latitude { get; set; }
+        public float Longitude { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public string Picture { get; set; }
         public int Price { get; set; }
         public int IsTrainer { get; set; }
-        public Result( int _userCode, string _firstName, string _lastName, string _gender, int _age, string _latitude, string _longitude, string _startTime, string _endTime, string _picture, int _price, int _isTrainer)
+        public double Distance { get; set; }
+
+        public Result( int _userCode, string _firstName, string _lastName, string _gender, int _age, float _latitude, float _longitude, string _startTime, string _endTime, string _picture, int _price, int _isTrainer, double _distance)
             
         {
             UserCode = _userCode;
@@ -34,6 +36,7 @@ namespace Benefit.Models
             Picture = _picture;
             Price = _price;
             IsTrainer = _isTrainer;
+            Distance = _distance;
     }
 
         public Result()

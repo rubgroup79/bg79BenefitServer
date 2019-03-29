@@ -12,7 +12,7 @@ namespace Benefit.Models
         public int GroupWithTrainer { get; set; }
         public int GroupWithPartners { get; set; }
 
-        public OnlineHistoryTrainee( int _userCode, string _latitude, string _longitude, string _startTime, string _endTime, int _withTrainer, int _withPartner, int _groupWithTrainer , int _groupWithPartners)
+        public OnlineHistoryTrainee( int _userCode, float _latitude, float _longitude, string _startTime, string _endTime, int _withTrainer, int _withPartner, int _groupWithTrainer , int _groupWithPartners)
             : base( _userCode, _latitude,  _longitude,  _startTime,  _endTime)
         {
             WithTrainer = _withTrainer;

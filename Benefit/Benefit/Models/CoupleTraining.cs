@@ -9,7 +9,7 @@ namespace Benefit.Models
     {
 
 
-        public CoupleTraining(string _trainingTime, string _latitude, string _longitude, int _withTrainer, int _statusCode )
+        public CoupleTraining(string _trainingTime, float _latitude, float _longitude, int _withTrainer, int _statusCode )
             :base(_trainingTime,  _latitude,  _longitude, _withTrainer, _statusCode)
         {
         }

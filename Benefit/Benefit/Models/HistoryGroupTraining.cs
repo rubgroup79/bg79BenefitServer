@@ -15,7 +15,7 @@ namespace Benefit.Models
         public int Price { get; set; }
 
 
-        public HistoryGroupTraining(string _trainingTime, string _latitude, string _longitude, int _withTrainer, int _statusCode, int _creatorCode, int _minParticipants, int _maxParticipants, int _price, int _sportCategoryCode,  int _currentParticipants=0)
+        public HistoryGroupTraining(string _trainingTime, float _latitude, float _longitude, int _withTrainer, int _statusCode, int _creatorCode, int _minParticipants, int _maxParticipants, int _price, int _sportCategoryCode,  int _currentParticipants=0)
             :base(_trainingTime,  _latitude,  _longitude, _withTrainer, _statusCode)
         {
             CreatorCode = _creatorCode;

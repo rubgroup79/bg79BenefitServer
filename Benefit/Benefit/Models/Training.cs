@@ -9,12 +9,12 @@ namespace Benefit.Models
     {
         public int TrainingCode { get; set; }
         public string TrainingTime { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        public float Latitude { get; set; }
+        public float Longitude { get; set; }
         public int WithTrainer { get; set; }
         public int StatusCode { get; set; }
 
-        public Training(string _trainingTime, string _latitude, string _longitude, int _withTrainer, int _statusCode)
+        public Training(string _trainingTime, float _latitude, float _longitude, int _withTrainer, int _statusCode)
         {
             TrainingTime = _trainingTime;
             Latitude = _latitude;
