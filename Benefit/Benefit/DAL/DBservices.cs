@@ -353,6 +353,8 @@ public class DBservices
 
     }
 
+
+
     public List<Result> SearchTrainers(OnlineHistoryTrainee o)
     {
 
@@ -756,6 +758,66 @@ public class DBservices
             throw (ex);
         }
         
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+
+    public List<Trainee> getLazyTrainees()
+    {
+
+        SqlConnection con = null;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            //Get trainee's details that needed for the search
+            String selectSTR = "SELECT T.TraineeCode, U.FirstName " +
+                " FROM Trainees as T inner join Users as U on T.TraineeCode = U.UserCode" +
+                " where (datediff(day, U.SignUpDate, getdate()) >= 7) AND (T.TraineeCode NOT IN" +
+                " (SELECT CTS.ReceiverCode" +
+                " from CoupleTraining as CT inner join CoupleTrainingSuggestions as CTS on CT.SuggestionCode = CTS.SuggestionCode" +
+                " where datediff(day, CT.TrainingTime, getdate()) <= 7))" +
+                " AND(T.TraineeCode NOT IN" +
+                " (SELECT CTS.SenderCode" +
+                " from CoupleTraining as CT inner join CoupleTrainingSuggestions as CTS on CT.SuggestionCode = CTS.SuggestionCode" +
+                " where datediff(day, CT.TrainingTime, getdate()) <= 7))" +
+                " AND(T.TraineeCode NOT IN" +
+                " (SELECT GP.UserCode" +
+                " FROM HistoryGroupTraining as HGT inner join GroupParticipants as GP on HGT.GroupTrainingCode = GP.GroupTrainingCode" +
+                " where(datediff(day, HGT.TrainingTime, getdate()) <= 7)  and(HGT.StatusCode <> 2)))";
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            
+            List<Trainee> tl = new List<Trainee>();
+     
+            //****returns list with trainee code and first name only****//
+
+            while (dr.Read())
+            {
+                Trainee t = new Trainee();
+                t.FirstName = Convert.ToString(dr["FirstName"]);
+                t.UserCode = Convert.ToInt32(dr["TraineeCode"]);
+
+                tl.Add(t);
+            }
+            
+            return tl;
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
         finally
         {
             if (con != null)

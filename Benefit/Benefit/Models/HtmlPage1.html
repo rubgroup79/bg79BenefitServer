@@ -49,64 +49,64 @@
             //    UserEmail: "stav@gmail.com"
             //}
             //ajaxCall("GET", "../api/CheckIfEmailExists", str, success1, error);
-            
+
             //--------------------------------------------------------------------
             // ADD TRAINER
             //--------------------------------------------------------------------
-                //Trainer = {
-                //    Email: "noam@gmail.com",
-                //    FirstName: "noam",
-                //    LastName: "sharon",
-                //    Password: "12345",
-                //    Gender: "Male",
-                //    DateOfBirth: "1992-10-16",
-                //    Picture: "11111",
-                //    SearchRadius: 8,
-                //    IsTrainer: 1,
-                //    SportCategories: [1, 2],
-                //    PersonalTrainingPrice: 200,
-                //    GroupTrainingPrice: 80
-                //}
-                //obj = JSON.stringify(Trainer);
-                //console.log(obj);
-                //ajaxCall("POST", "../api/InsertTrainer", obj, success1, error);
-            
+            //Trainer = {
+            //    Email: "noam@gmail.com",
+            //    FirstName: "noam",
+            //    LastName: "sharon",
+            //    Password: "12345",
+            //    Gender: "Male",
+            //    DateOfBirth: "1992-10-16",
+            //    Picture: "11111",
+            //    SearchRadius: 8,
+            //    IsTrainer: 1,
+            //    SportCategories: [1, 2],
+            //    PersonalTrainingPrice: 200,
+            //    GroupTrainingPrice: 80
+            //}
+            //obj = JSON.stringify(Trainer);
+            //console.log(obj);
+            //ajaxCall("POST", "../api/InsertTrainer", obj, success1, error);
+
             //--------------------------------------------------------------------
             // ADD ONLINE TRAINEE
             //--------------------------------------------------------------------
 
-            onlinehistorytrainee = {
-                UserCode: 1,
-                Latitude: 32.360869,
-                Longitude: 34.862154,
-                StartTime: "2019-03-16 08:00:00.123",
-                Endtime: "2019-03-16 12:00:00.123" ,
-                WithTrainer: 0,
-                WithPartner: 1,
-                GroupWithTrainer: 1,
-                GroupWithPartners: 0
-            }
+            //onlinehistorytrainee = {
+            //    UserCode: 1,
+            //    Latitude: 32.360869,
+            //    Longitude: 34.862154,
+            //    StartTime: "2019-03-16 08:00:00.123",
+            //    Endtime: "2019-03-16 12:00:00.123",
+            //    WithTrainer: 0,
+            //    WithPartner: 1,
+            //    GroupWithTrainer: 1,
+            //    GroupWithPartners: 0
+            //}
 
-            obj = JSON.stringify(onlinehistorytrainee);
-            console.log(obj);
-            ajaxCall("POST", "../api/InsertOnlineTrainee", obj, successInsertOnline, error);
-            ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline, error);
+            //obj = JSON.stringify(onlinehistorytrainee);
+            //console.log(obj);
+            //ajaxCall("POST", "../api/InsertOnlineTrainee", obj, successInsertOnline, error);
+            //ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline, error);
 
             //--------------------------------------------------------------------
             // ADD ONLINE TRAINER
             //--------------------------------------------------------------------
 
-        //    OnlineHistoryTrainer = {
-        //        UserCode: 4,
-        //        Latitude: "32.328673",
-        //        Longitude: "34.906768",
-        //        StartTime: "2019-03-16 09:00:29.123",
-        //        EndTime: "2019-03-16 09:30:29.123"
-        //    }
+            //    OnlineHistoryTrainer = {
+            //        UserCode: 4,
+            //        Latitude: "32.328673",
+            //        Longitude: "34.906768",
+            //        StartTime: "2019-03-16 09:00:29.123",
+            //        EndTime: "2019-03-16 09:30:29.123"
+            //    }
 
-        //    obj = JSON.stringify(OnlineHistoryTrainer);
-        //    console.log(obj);
-        //    ajaxCall("POST", "../api/InsertOnlineTrainer", obj, successInsertOnline, error);
+            //    obj = JSON.stringify(OnlineHistoryTrainer);
+            //    console.log(obj);
+            //    ajaxCall("POST", "../api/InsertOnlineTrainer", obj, successInsertOnline, error);
 
 
 
@@ -114,22 +114,30 @@
             // ADD Group
             //--------------------------------------------------------------------
 
-        //    HistoryGroupTraining = {
-        //        TrainingTime: "2019 - 03 - 16 08: 00: 00.123",
-        //        Latitude: "32.360869",
-        //        Longitude: "34.862154",
-        //        WithTrainer: 1,
-        //        CreatorCode: 4,
-        //        MinParticipants: 2,
-        //        MaxParticipants: 8,
-        //        StatusCode: 1,
-        //        SportCategoryCode: 1,
-        //        Price: 150
-        //    }
+            //    HistoryGroupTraining = {
+            //        TrainingTime: "2019 - 03 - 16 08: 00: 00.123",
+            //        Latitude: "32.360869",
+            //        Longitude: "34.862154",
+            //        WithTrainer: 1,
+            //        CreatorCode: 4,
+            //        MinParticipants: 2,
+            //        MaxParticipants: 8,
+            //        StatusCode: 1,
+            //        SportCategoryCode: 1,
+            //        Price: 150
+            //    }
 
-        //    obj = JSON.stringify(HistoryGroupTraining);
-        //    console.log(obj);
-        //    ajaxCall("POST", "../api/InsertGroupTraining", obj, successInsertOnline, error);
+            //    obj = JSON.stringify(HistoryGroupTraining);
+            //    console.log(obj);
+            //    ajaxCall("POST", "../api/InsertGroupTraining", obj, successInsertOnline, error);
+
+
+            //--------------------------------------------------------------------
+            // check function GET LAZY TRAINEES
+            //--------------------------------------------------------------------
+            
+            ajaxCall("GET", "../api/getLazyTrainees", "", successInsertOnline, error);
+            
         });
 
 
@@ -141,7 +149,7 @@
         function success1(data) {
             alert(data);
         }
-        
+
         function success(data) {
             console.log(data);
             if (data) {

@@ -26,8 +26,6 @@ namespace Benefit.Controllers
         {
             BenefitSystem s = new BenefitSystem();
             return s.CheckIfEmailExists(Email);
-
-
         }
         
 
@@ -37,9 +35,24 @@ namespace Benefit.Controllers
         {
             BenefitSystem s = new BenefitSystem();
             return s.CheckIfPasswordMatches(t.Email, t.Password);
-
-
+         
         }
+
+        [HttpGet]
+        [Route("api/getLazyTrainees")]
+        public IEnumerable<Trainee> getLazyTrainees()
+        {
+            BenefitSystem s = new BenefitSystem();
+            return s.getLazyTrainees();
+        }
+
+
+
+
+        //--------------------------------------------------------------------
+        // upload pictures 
+        //--------------------------------------------------------------------
+
 
         [Route("uploadpicture")]
         public Task<HttpResponseMessage> Post()

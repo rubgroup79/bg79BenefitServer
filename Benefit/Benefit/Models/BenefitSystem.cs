@@ -25,6 +25,13 @@ namespace Benefit.Models
             return dbs.CheckIfPasswordMatches(UserEmail, Password);
         }
 
+        // this function returns all trainees that didnt participate in a training for over a week//
+        public List<Trainee> getLazyTrainees()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getLazyTrainees();
+        }
+
         //public List<User> SearchPartners(CurrentOnlineTrainee o)
         //{
         //    DBservices dbs = new DBservices();
