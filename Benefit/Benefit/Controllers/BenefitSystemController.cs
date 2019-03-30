@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Benefit.Models;
 
@@ -72,13 +75,13 @@ namespace Benefit.Controllers
 
                             //delete all files begining with the same name
                             string[] names = Directory.GetFiles(rootPath);
-                            foreach (var fileName in names)
-                            {
-                                if (Path.GetFileNameWithoutExtension(fileName).IndexOf(Path.GetFileNameWithoutExtension(name)) != -1)
-                                {
-                                    File.Delete(fileName);
-                                }
-                            }
+                            //foreach (var fileName in names)
+                            //{
+                            //    if (Path.GetFileNameWithoutExtension(fileName).IndexOf(Path.GetFileNameWithoutExtension(name)) != -1)
+                            //    {
+                            //        File.Delete(fileName);
+                            //    }
+                            //}
 
                             //File.Move(item.LocalFileName, Path.Combine(rootPath, newFileName));
                             File.Copy(item.LocalFileName, Path.Combine(rootPath, newFileName), true);
@@ -111,6 +114,5 @@ namespace Benefit.Controllers
         }
     }
 
+}
 
-}
-}
