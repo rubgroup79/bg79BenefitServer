@@ -769,7 +769,37 @@ public class DBservices
     }
 
 
-    public List<Trainee> getLazyTrainees()
+    public void UpdateToken(string Token, int UserCode)
+    {
+
+        SqlConnection con = null;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+            //Get trainee's details that needed for the search
+            String selectSTR = "Update Users set Token='"+Token+"' where Users.UserCode="+UserCode;
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    public List<Trainee> GetLazyTrainees()
     {
 
         SqlConnection con = null;
@@ -780,7 +810,7 @@ public class DBservices
             con = connect("BenefitConnectionStringName");
 
             //Get trainee's details that needed for the search
-            String selectSTR = "SELECT T.TraineeCode, U.FirstName " +
+            String selectSTR = "SELECT U.Token, U.FirstName " +
                 " FROM Trainees as T inner join Users as U on T.TraineeCode = U.UserCode" +
                 " where (datediff(day, U.SignUpDate, getdate()) >= 7) AND (T.TraineeCode NOT IN" +
                 " (SELECT CTS.ReceiverCode" +
@@ -805,7 +835,8 @@ public class DBservices
             {
                 Trainee t = new Trainee();
                 t.FirstName = Convert.ToString(dr["FirstName"]);
-                t.UserCode = Convert.ToInt32(dr["TraineeCode"]);
+                t.Token = Convert.ToString(dr["Token"]);
+                
 
                 tl.Add(t);
             }
@@ -836,8 +867,8 @@ public class DBservices
         String command;
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}','{5}','{6}',{7},{8},{9})", u.Email, u.FirstName, u.LastName, u.Password, u.Gender, u.DateOfBirth, u.Picture, u.SearchRadius.ToString(), u.IsTrainer.ToString(), u.Rate.ToString());
-        String prefix = "INSERT INTO Users (Email, FirstName, LastName, Password, Gender, DateOfBirth, Picture, SearchRadius, IsTrainer, Rate) output INSERTED.UserCode ";
+        sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}','{5}','{6}',{7},{8},{9}, {10})", u.Email, u.FirstName, u.LastName, u.Password, u.Gender, u.DateOfBirth, u.Picture, u.SearchRadius.ToString(), u.IsTrainer.ToString(), u.Rate.ToString(), "getdate()");
+        String prefix = "INSERT INTO Users (Email, FirstName, LastName, Password, Gender, DateOfBirth, Picture, SearchRadius, IsTrainer, Rate, SignUpDate) output INSERTED.UserCode ";
         command = prefix + sb.ToString();
         return command;
     }

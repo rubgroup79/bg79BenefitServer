@@ -26,10 +26,16 @@ namespace Benefit.Models
         }
 
         // this function returns all trainees that didnt participate in a training for over a week//
-        public List<Trainee> getLazyTrainees()
+        public List<Trainee> GetLazyTrainees()
         {
             DBservices dbs = new DBservices();
-            return dbs.getLazyTrainees();
+            return dbs.GetLazyTrainees();
+        }
+
+        public void UpdateToken(string Token, int UserCode)
+        {
+            DBservices dbs = new DBservices();
+            dbs.UpdateToken(Token, UserCode);
         }
 
         //public List<User> SearchPartners(CurrentOnlineTrainee o)

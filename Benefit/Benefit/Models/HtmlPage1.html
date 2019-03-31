@@ -19,6 +19,9 @@
 
         $(document).ready(function () {
 
+            
+
+
             //--------------------------------------------------------------------
             // ADD TRAINEE
             //--------------------------------------------------------------------
@@ -135,11 +138,27 @@
             //--------------------------------------------------------------------
             // check function GET LAZY TRAINEES
             //--------------------------------------------------------------------
-            
-            ajaxCall("GET", "../api/getLazyTrainees", "", successInsertOnline, error);
+
+            ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
+
             
         });
 
+
+        function successGetLazy(data) {
+
+            for (var i = 0; i < data.length; i++) {
+                var pnd = {
+                    to: data[i].Token,
+                    title: 'Long Time No See',
+                    body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
+                    badge: 3
+                }
+                ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
+            }
+
+           
+        }
 
 
         function successInsertOnline(data) {

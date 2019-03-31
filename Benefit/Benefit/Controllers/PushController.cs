@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
                 title = pnd.title,
                 body = pnd.body,
                 badge = pnd.badge,
-                data = pnd.data//new { name = "nir", grade = 100 }
+                //data = pnd.data//new { name = "nir", grade = 100 }
             };
 
             string postData = new JavaScriptSerializer().Serialize(objectToSend);
@@ -62,7 +62,10 @@ namespace WebApplication1.Controllers
 
             return "success:) --- " + responseFromServer + ", " + returnStatus;
         }
-
+        // https://www.pubnub.com/blog/react-native-push-notifications-ios-android/
+        // https://docs.expo.io/versions/latest/guides/push-notifications/
+        //https://levelup.gitconnected.com/react-native-adding-push-notifications-to-your-app-with-expo-8e4b659ddbfb
+        //https://www.youtube.com/watch?v=kZqzAPqRbS8 
         // GET: api/Push
         public IEnumerable<string> Get()
         {
@@ -97,12 +100,12 @@ namespace WebApplication1.Controllers
         public string title { get; set; }
         public string body { get; set; }
         public int badge { get; set; }
-        public Data data { get; set; }
+        //public Data data { get; set; }
     }
 
-    public class Data
-    {
-        public int grade { get; set; }
-        public string name { get; set; }
-    }
+    //public class Data
+    //{
+    //    public int grade { get; set; }
+    //    public string name { get; set; }
+    //}
 }

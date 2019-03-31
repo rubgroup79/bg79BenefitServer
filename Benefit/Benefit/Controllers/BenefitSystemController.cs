@@ -40,13 +40,21 @@ namespace Benefit.Controllers
 
         [HttpGet]
         [Route("api/getLazyTrainees")]
-        public IEnumerable<Trainee> getLazyTrainees()
+        public IEnumerable<Trainee> GetLazyTrainees()
         {
             BenefitSystem s = new BenefitSystem();
-            return s.getLazyTrainees();
+            return s.GetLazyTrainees();
+         
         }
 
+        [HttpPost]
+        [Route("api/UpdateToken")]
+        public void UpdadteToken(string Token, int UserCode)
+        {
+            BenefitSystem s = new BenefitSystem();
+            s.UpdateToken(Token, UserCode);
 
+        }
 
 
         //--------------------------------------------------------------------
