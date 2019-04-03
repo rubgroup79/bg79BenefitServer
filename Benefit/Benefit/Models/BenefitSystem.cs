@@ -32,6 +32,14 @@ namespace Benefit.Models
             return dbs.GetLazyTrainees();
         }
 
+        public List<Trainer> GetLazyTrainers()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.GetLazyTrainers();
+        }
+
+
+
         public void UpdateToken(string Token, int UserCode)
         {
             DBservices dbs = new DBservices();

@@ -24,6 +24,7 @@ namespace Benefit.Controllers
            return o.InsertOnlineTrainee(o);
         }
 
+
         [HttpPost]
         [Route("api/SearchGroups")]
         public IEnumerable<HistoryGroupTraining> SearchGroups([FromBody]OnlineHistoryTrainee o)

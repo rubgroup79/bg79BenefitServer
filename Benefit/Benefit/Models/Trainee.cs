@@ -36,5 +36,11 @@ namespace Benefit.Models
             return UserCode;
         }
 
+        public void JoinGroup(int UserCode, int GroupTrainingCode)
+        {
+            DBservices dbs = new DBservices();
+            dbs.JoinGroup( UserCode, GroupTrainingCode);
+        }
+
     }
 }

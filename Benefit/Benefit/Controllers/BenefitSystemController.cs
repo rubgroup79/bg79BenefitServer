@@ -35,7 +35,6 @@ namespace Benefit.Controllers
         {
             BenefitSystem s = new BenefitSystem();
             return s.CheckIfPasswordMatches(t.Email, t.Password);
-         
         }
 
         [HttpGet]
@@ -46,6 +45,17 @@ namespace Benefit.Controllers
             return s.GetLazyTrainees();
          
         }
+
+        [HttpGet]
+        [Route("api/getLazyTrainers")]
+        public IEnumerable<Trainer> GetLazyTrainers()
+        {
+            BenefitSystem s = new BenefitSystem();
+            return s.GetLazyTrainers();
+
+        }
+
+
 
         [HttpPost]
         [Route("api/UpdateToken")]

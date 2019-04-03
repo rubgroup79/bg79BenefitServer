@@ -352,9 +352,7 @@ public class DBservices
         }
 
     }
-
-
-
+    
     public List<Result> SearchTrainers(OnlineHistoryTrainee o)
     {
 
@@ -468,7 +466,7 @@ public class DBservices
 
     public List<HistoryGroupTraining> SearchGroups(OnlineHistoryTrainee o)
     {
-
+     
         SqlConnection con = null;
         SqlConnection con1 = null;
         SqlCommand cmd;
@@ -604,6 +602,19 @@ public class DBservices
         SqlCommand cmd1 = null;
         SqlCommand cmd2 = null;
         SqlCommand cmd3 = null;
+
+        //delete all trainees/trainers/groups that are not active (end time is over)
+        try
+        {
+            DeleteNotActive();
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+        
+
         try
         {
             con = connect("BenefitConnectionStringName");
@@ -769,6 +780,48 @@ public class DBservices
     }
 
 
+    // הפונקציה רצה על טבלת האונליין ומוחקת את מי שזמן סיום הפעילות שלו חלף
+    private void DeleteNotActive()
+    {
+
+        SqlConnection con = null;
+       
+        SqlCommand cmd;
+       
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            //Get trainee's details that needed for the search
+            String selectSTR = "DELETE FROM CurrentOnlineTrainee  WHERE OnlineCode in (select OHT.OnlineCode" +
+                " from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as CO on OHT.OnlineCode = CO.OnlineCode" +
+                " where DATEDIFF(second, OHT.EndTime, getdate()) > 0)" +
+                "DELETE FROM CurrentOnlineTrainer WHERE OnlineCode in (select OHT.OnlineCode" +
+                " from OnlineHistoryTrainer as OHT inner join CurrentOnlineTrainer as CO on OHT.OnlineCode = CO.OnlineCode" +
+                " where DATEDIFF(second, OHT.EndTime, getdate()) > 0)"+
+                "  DELETE FROM ActiveGroupTraining WHERE GroupTrainingCode in (select AGT.GroupTrainingCode" +
+                " from ActiveGroupTraining as AGT inner join HistoryGroupTraining as HGT on AGT.GroupTrainingCode = HGT.GroupTrainingCode" +
+                " where DATEDIFF(second, HGT.TrainingTime, getdate()) > 0)";
+
+            cmd = new SqlCommand(selectSTR, con);
+            cmd.ExecuteNonQuery();
+            //    SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
     public void UpdateToken(string Token, int UserCode)
     {
 
@@ -858,6 +911,140 @@ public class DBservices
         }
 
     }
+
+    public List<Trainer> GetLazyTrainers()
+    {
+
+        SqlConnection con = null;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            //Get trainee's details that needed for the search
+            String selectSTR = "SELECT U.Token, U.FirstName " +
+                " FROM Trainers as T inner join Users as U on T.TrainerCode = U.UserCode" +
+                " where (datediff(day, U.SignUpDate, getdate()) >= 7) AND (T.TrainerCode NOT IN" +
+                " (SELECT CTS.ReceiverCode" +
+                " from CoupleTraining as CT inner join CoupleTrainingSuggestions as CTS on CT.SuggestionCode = CTS.SuggestionCode" +
+                " where datediff(day, CT.TrainingTime, getdate()) <= 7))" +
+                " AND(T.TrainerCode NOT IN" +
+                " (SELECT HGT.CreatorCode" +
+                " FROM HistoryGroupTraining as HGT inner join Trainers as T on HGT.CreatorCode=T.TrainerCode" +
+                " where(datediff(day, HGT.TrainingTime, getdate()) <= 7) and(HGT.StatusCode <> 2))" +
+                ")";
+
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            List<Trainer> tl = new List<Trainer>();
+
+            //****returns list with trainee code and first name only****//
+
+            while (dr.Read())
+            {
+                Trainer t = new Trainer();
+                t.FirstName = Convert.ToString(dr["FirstName"]);
+                t.Token = Convert.ToString(dr["Token"]);
+
+
+                tl.Add(t);
+            }
+
+            return tl;
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    public void JoinGroup(int UserCode, int GroupTrainingCode)
+    {
+
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+
+        try
+        {
+            String pStr = BuildInsertGroupParticipantsCommand(UserCode, GroupTrainingCode);
+            cmd = CreateCommand(pStr, con);
+            cmd.ExecuteNonQuery();
+            UpdateNumOfParticipants(1, GroupTrainingCode);
+        }
+        catch (Exception ex)
+        {
+
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+
+    //this function gets num=1 if added a new participants, num=-1 if deleting one participant
+    private void UpdateNumOfParticipants(int num, int GroupTrainingCode)
+    {
+
+        SqlConnection con = null;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+            //update num
+            String selectSTR = "Update HistoryGroupTraining set CurrentParticipants=CurrentParticipants+'" + num + "' where GroupTrainingCode='" +GroupTrainingCode+
+                "'  Update HistoryGroupTraining set StatusCode=3 where CurrentParticipants=MaxParticipants";
+            cmd = new SqlCommand(selectSTR, con);
+            //int CurrentParticipants = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.ExecuteNonQuery();
+   
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
 
     //--------------------------------------------------------------------
     // Build the Insert command String
@@ -970,7 +1157,18 @@ public class DBservices
         command = prefix + sb.ToString();
         return command;
     }
-    
+
+    private String BuildInsertGroupParticipantsCommand(int UserCode, int GroupTrainingCode)
+    {
+        String command;
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendFormat("Values({0},{1},'{2}')", UserCode.ToString(), GroupTrainingCode.ToString(), '1');
+        String prefix = "INSERT INTO GroupParticipants (UserCode, GroupTrainingCode, StatusCode) ";
+        command = prefix + sb.ToString();
+        return command;
+    }
+
     //---------------------------------------------------------------------------------
     // Create the SqlCommand
     //---------------------------------------------------------------------------------

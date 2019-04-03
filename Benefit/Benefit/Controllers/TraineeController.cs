@@ -32,6 +32,13 @@ namespace Benefit.Controllers
         }
 
 
+        [HttpPost]
+        [Route("api/JoinGroup")]
+        public void JoinGroup(int UserCode, int GroupTrainingCode)
+        {
+            Trainee t = new Trainee();
+            t.JoinGroup(UserCode, GroupTrainingCode);
+        }
 
     }
 }
