@@ -184,11 +184,15 @@
     <Compile Include="Controllers\OnlineHistoryTrainerController.cs" />
     <Compile Include="Controllers\HistoryGroupTrainingController.cs" />
     <Compile Include="Controllers\OnlineHistoryTraineeController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\PushController.cs" />
     <Compile Include="Controllers\TrainerController.cs" />
     <Compile Include="Controllers\TraineeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\DBservices.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Models\BenefitSystem.cs" />
     <Compile Include="Models\CurrentOnlineTrainer.cs" />
     <Compile Include="Models\CoupleTraining.cs" />
@@ -223,6 +227,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global %281%29.asax" />
+    <Content Include="Global.asax" />
     <Content Include="Models\HtmlPage1.html" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\bootstrap.js" />

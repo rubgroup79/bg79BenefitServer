@@ -39,7 +39,7 @@ namespace Benefit.Models
         public void JoinGroup(int UserCode, int GroupTrainingCode)
         {
             DBservices dbs = new DBservices();
-            dbs.JoinGroup( UserCode, GroupTrainingCode);
+            dbs.JoinGroup( UserCode, GroupTrainingCode,0);
         }
 
     }
