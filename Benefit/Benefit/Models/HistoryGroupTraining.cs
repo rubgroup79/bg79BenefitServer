@@ -21,7 +21,8 @@ namespace Benefit.Models
             CreatorCode = _creatorCode;
             MinParticipants = _minParticipants;
             MaxParticipants = _maxParticipants;
-            CurrentParticipants = _currentParticipants;
+            if (_withTrainer == 0) CurrentParticipants = 1;
+            else CurrentParticipants = 0;
             SportCategoryCode = _sportCategoryCode;
             Price = _price;
 

@@ -514,6 +514,7 @@ public class DBservices
                 "from HistoryGroupTraining as HGT inner join ActiveGroupTraining as AGT on HGT.GroupTrainingCode = AGT.GroupTrainingCode " +
                 "where " + GruopWith+
                 " and( HGT.TrainingTime between '" + o.StartTime + "' and '" + o.EndTime + "') " +
+                " and HGT.StatusCode<>'3' "+
                 sportCategoriesStr;
 
             SqlCommand cmd1 = new SqlCommand(selectSTR, con1);
@@ -763,6 +764,9 @@ public class DBservices
             String pStr1 = BuildInsertActiveGroupTrainingCommand(HistoryGroupTrainingCode);
             cmd1 = CreateCommand(pStr1, con1);
             cmd1.ExecuteNonQuery();
+            int AddParticipantsNum = 0;
+            if (h.WithTrainer == 0) AddParticipantsNum = 1;
+            JoinGroup(h.CreatorCode, HistoryGroupTrainingCode, AddParticipantsNum);
         }
         catch (Exception ex)
         {
@@ -796,10 +800,10 @@ public class DBservices
             String selectSTR = "DELETE FROM CurrentOnlineTrainee  WHERE OnlineCode in (select OHT.OnlineCode" +
                 " from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as CO on OHT.OnlineCode = CO.OnlineCode" +
                 " where DATEDIFF(second, OHT.EndTime, getdate()) > 0)" +
-                "DELETE FROM CurrentOnlineTrainer WHERE OnlineCode in (select OHT.OnlineCode" +
+                " DELETE FROM CurrentOnlineTrainer WHERE OnlineCode in (select OHT.OnlineCode" +
                 " from OnlineHistoryTrainer as OHT inner join CurrentOnlineTrainer as CO on OHT.OnlineCode = CO.OnlineCode" +
                 " where DATEDIFF(second, OHT.EndTime, getdate()) > 0)"+
-                "  DELETE FROM ActiveGroupTraining WHERE GroupTrainingCode in (select AGT.GroupTrainingCode" +
+                " DELETE FROM ActiveGroupTraining WHERE GroupTrainingCode in (select AGT.GroupTrainingCode" +
                 " from ActiveGroupTraining as AGT inner join HistoryGroupTraining as HGT on AGT.GroupTrainingCode = HGT.GroupTrainingCode" +
                 " where DATEDIFF(second, HGT.TrainingTime, getdate()) > 0)";
 
@@ -970,7 +974,7 @@ public class DBservices
 
     }
 
-    public void JoinGroup(int UserCode, int GroupTrainingCode)
+    public void JoinGroup(int UserCode, int GroupTrainingCode, int AddParticipantsNum)
     {
 
 
@@ -992,7 +996,7 @@ public class DBservices
             String pStr = BuildInsertGroupParticipantsCommand(UserCode, GroupTrainingCode);
             cmd = CreateCommand(pStr, con);
             cmd.ExecuteNonQuery();
-            UpdateNumOfParticipants(1, GroupTrainingCode);
+            UpdateNumOfParticipants(AddParticipantsNum, GroupTrainingCode);
         }
         catch (Exception ex)
         {
@@ -1012,7 +1016,7 @@ public class DBservices
 
 
     //this function gets num=1 if added a new participants, num=-1 if deleting one participant
-    private void UpdateNumOfParticipants(int num, int GroupTrainingCode)
+    private void UpdateNumOfParticipants(int Num, int GroupTrainingCode)
     {
 
         SqlConnection con = null;
@@ -1022,7 +1026,7 @@ public class DBservices
         {
             con = connect("BenefitConnectionStringName");
             //update num
-            String selectSTR = "Update HistoryGroupTraining set CurrentParticipants=CurrentParticipants+'" + num + "' where GroupTrainingCode='" +GroupTrainingCode+
+            String selectSTR = "Update HistoryGroupTraining set CurrentParticipants=CurrentParticipants+'" + Num + "' where GroupTrainingCode='" +GroupTrainingCode+
                 "'  Update HistoryGroupTraining set StatusCode=3 where CurrentParticipants=MaxParticipants";
             cmd = new SqlCommand(selectSTR, con);
             //int CurrentParticipants = Convert.ToInt32(cmd.ExecuteScalar());
