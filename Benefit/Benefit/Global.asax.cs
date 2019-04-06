@@ -31,7 +31,7 @@ namespace Benefit
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            timer.Interval = 1800000;
+            timer.Interval = 60000;
             timer.Elapsed += tm_Tick;
             path = Server.MapPath("/");
             StartTimer();
@@ -43,7 +43,7 @@ namespace Benefit
 
 
             //&& DateTime.Now.ToString("HH:mm tt") == "00:00"
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday  && DateTime.Now.ToString("HH") == "17")
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday  && DateTime.Now.ToString("HH") == "19")
             {
                 //Console.Beep(300, 1000);
                 DBservices db = new DBservices();

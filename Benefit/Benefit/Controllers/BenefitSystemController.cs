@@ -137,7 +137,7 @@ namespace Benefit.Controllers
                         }
                     }
 
-                    return Request.CreateResponse(HttpStatusCode.Created, "benefit " + savedFilePath[0] + "!" + provider.FileData.Count + "!" + outputForNir + ":)");
+                    return Request.CreateResponse(HttpStatusCode.Created,savedFilePath[0]);
                 });
             return task;
         }
