@@ -143,30 +143,31 @@
             //}
 
             //obj = JSON.stringify(details);
-            ajaxCall("POST", "../api/JoinGroup?UserCode=4&GroupTrainingCode=6", "", success1, error);
+            //ajaxCall("POST", "../api/JoinGroup?UserCode=4&GroupTrainingCode=6", "", success1, error);
 
             //--------------------------------------------------------------------
             // check function GET LAZY TRAINEES
             //--------------------------------------------------------------------
 
-           // ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
+           ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
            // ajaxCall("GET", "../api/getLazyTrainers", "", successGetLazy, error);
+            //ajaxCall("GET", "../api/start", "", successGetLazy, error);
  
         });
 
 
         // send push notifications to lazy trainees/trainers 
         function successGetLazy(data) {
-
-            for (var i = 0; i < data.length; i++) {
-                var pnd = {
-                    to: data[i].Token,
-                    title: 'Long Time No See',
-                    body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
-                    badge: 3
-                }
-                ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
-            }
+            console.log(data);
+            //for (var i = 0; i < data.length; i++) {
+            //    var pnd = {
+            //        to: data[i].Token,
+            //        title: 'Long Time No See',
+            //        body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
+            //        badge: 1
+            //    }
+            //    ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
+            //}
         }
 
 

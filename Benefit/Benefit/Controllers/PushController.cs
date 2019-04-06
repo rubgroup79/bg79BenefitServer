@@ -7,25 +7,29 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+using Benefit.Models;
 
-namespace WebApplication1.Controllers
+namespace Benefit.Controllers
 {
     public class PushController : ApiController
     {
         [Route("sendpushnotification")]
-        public string Post([FromBody]PushNotData pnd)
+        public string Post([FromBody]PushNotification pnd)
+        //public string Post(string To, string Title, string Body, int Badge)
         {
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create("https://exp.host/--/api/v2/push/send");
             // Set the Method property of the request to POST.  
             request.Method = "POST";
             // Create POST data and convert it to a byte array.  
+
+
             var objectToSend = new
             {
-                to = pnd.to,
-                title = pnd.title,
-                body = pnd.body,
-                badge = pnd.badge,
+                to = pnd.To,
+                title = pnd.Title,
+                body = pnd.Body,
+                badge = pnd.Badge,
                 //data = pnd.data//new { name = "nir", grade = 100 }
             };
 
@@ -91,21 +95,9 @@ namespace WebApplication1.Controllers
         // DELETE: api/Push/5
         public void Delete(int id)
         {
+
         }
     }
+    
 
-    public class PushNotData
-    {
-        public string to { get; set; }
-        public string title { get; set; }
-        public string body { get; set; }
-        public int badge { get; set; }
-        //public Data data { get; set; }
-    }
-
-    //public class Data
-    //{
-    //    public int grade { get; set; }
-    //    public string name { get; set; }
-    //}
 }

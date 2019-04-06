@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Benefit.Models;
+using Benefit.Controllers;
 
 namespace Benefit.Controllers
 {
@@ -42,7 +43,9 @@ namespace Benefit.Controllers
         public IEnumerable<Trainee> GetLazyTrainees()
         {
             BenefitSystem s = new BenefitSystem();
-            return s.GetLazyTrainees();
+            List<Trainee> tl= s.GetLazyTrainees();
+            return tl;
+            
          
         }
 

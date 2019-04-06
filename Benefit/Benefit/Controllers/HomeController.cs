@@ -11,7 +11,7 @@ namespace Benefit.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
-
+            Console.Beep(300,1000);
             return View();
         }
     }

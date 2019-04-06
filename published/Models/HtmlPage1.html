@@ -79,21 +79,24 @@
             //--------------------------------------------------------------------
 
             //onlinehistorytrainee = {
-            //    UserCode: 1,
+            //    UserCode: 10,
             //    Latitude: 32.360869,
             //    Longitude: 34.862154,
-            //    StartTime: "2019-03-16 08:00:00.123",
-            //    Endtime: "2019-03-16 12:00:00.123",
+            //    StartTime: "2019-04-03 08:00:00.123",
+            //    EndTime: "2019-04-03 14:00:00.123",
             //    WithTrainer: 0,
             //    WithPartner: 1,
-            //    GroupWithTrainer: 1,
+            //    GroupWithTrainer: 0,
             //    GroupWithPartners: 0
             //}
 
             //obj = JSON.stringify(onlinehistorytrainee);
             //console.log(obj);
-            //ajaxCall("POST", "../api/InsertOnlineTrainee", obj, successInsertOnline, error);
+            //ajaxCall("POST", "../api/insertonlinetrainee", obj, successInsertOnline, error);
             //ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline, error);
+
+            //delete from db 
+           // ajaxcall("GET", "../api/DeleteNotActive", obj, success1, error);
 
             //--------------------------------------------------------------------
             // ADD ONLINE TRAINER
@@ -112,52 +115,59 @@
             //    ajaxCall("POST", "../api/InsertOnlineTrainer", obj, successInsertOnline, error);
 
 
-
             //--------------------------------------------------------------------
             // ADD Group
             //--------------------------------------------------------------------
 
-            //    HistoryGroupTraining = {
-            //        TrainingTime: "2019 - 03 - 16 08: 00: 00.123",
-            //        Latitude: "32.360869",
-            //        Longitude: "34.862154",
-            //        WithTrainer: 1,
-            //        CreatorCode: 4,
-            //        MinParticipants: 2,
-            //        MaxParticipants: 8,
-            //        StatusCode: 1,
-            //        SportCategoryCode: 1,
-            //        Price: 150
-            //    }
+                //HistoryGroupTraining = {
+                //    TrainingTime: "2019-04-03 16:00:00.123",
+                //    Latitude: "32.360869",
+                //    Longitude: "34.862154",
+                //    WithTrainer: 1,
+                //    CreatorCode: 4,
+                //    MinParticipants: 2,
+                //    MaxParticipants: 8,
+                //    StatusCode: 1,
+                //    SportCategoryCode: 1,
+                //    Price: 150
+                //}
 
-            //    obj = JSON.stringify(HistoryGroupTraining);
+                //obj = JSON.stringify(HistoryGroupTraining);
             //    console.log(obj);
             //    ajaxCall("POST", "../api/InsertGroupTraining", obj, successInsertOnline, error);
 
+        
+            //details = {
+            //    UserCode: 1,
+            //    GroupTrainingCode:1
+            //}
+
+            //obj = JSON.stringify(details);
+            //ajaxCall("POST", "../api/JoinGroup?UserCode=4&GroupTrainingCode=6", "", success1, error);
 
             //--------------------------------------------------------------------
             // check function GET LAZY TRAINEES
             //--------------------------------------------------------------------
 
-            ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
-
-            
+           ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
+           // ajaxCall("GET", "../api/getLazyTrainers", "", successGetLazy, error);
+            //ajaxCall("GET", "../api/start", "", successGetLazy, error);
+ 
         });
 
 
+        // send push notifications to lazy trainees/trainers 
         function successGetLazy(data) {
-
-            for (var i = 0; i < data.length; i++) {
-                var pnd = {
-                    to: data[i].Token,
-                    title: 'Long Time No See',
-                    body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
-                    badge: 3
-                }
-                ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
-            }
-
-           
+            console.log(data);
+            //for (var i = 0; i < data.length; i++) {
+            //    var pnd = {
+            //        to: data[i].Token,
+            //        title: 'Long Time No See',
+            //        body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
+            //        badge: 1
+            //    }
+            //    ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
+            //}
         }
 
 
