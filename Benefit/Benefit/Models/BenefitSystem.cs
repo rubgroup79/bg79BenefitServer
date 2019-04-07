@@ -39,6 +39,13 @@ namespace Benefit.Models
         }
 
 
+        public List<PrefferedDay> GetPrefferedTrainingDay()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.GetPrefferedTrainingDay();
+        }
+
+
 
         public void UpdateToken(string Token, int UserCode)
         {

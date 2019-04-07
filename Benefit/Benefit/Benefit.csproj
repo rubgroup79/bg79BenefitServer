@@ -193,6 +193,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PrefferedDay.cs" />
     <Compile Include="Models\PushNotification.cs" />
     <Compile Include="Models\BenefitSystem.cs" />
     <Compile Include="Models\CurrentOnlineTrainer.cs" />

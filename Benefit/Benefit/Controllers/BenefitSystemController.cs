@@ -69,7 +69,14 @@ namespace Benefit.Controllers
 
         }
 
+        [HttpGet]
+        [Route("api/GetPrefferedDay")]
+        public List<PrefferedDay> GetPrefferedTrainingDay()
+        {
+            BenefitSystem s = new BenefitSystem();
+            return s.GetPrefferedTrainingDay();
 
+        }
         //--------------------------------------------------------------------
         // upload pictures 
         //--------------------------------------------------------------------
