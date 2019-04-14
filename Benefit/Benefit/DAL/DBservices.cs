@@ -395,7 +395,7 @@ public class DBservices
             string trainerGenderStr = null;
             if (search_TrainerGender == "Both")
                 trainerGenderStr = " ";
-            else trainerGenderStr = " (U.gender = '" + search_TrainerGender + "') ";
+            else trainerGenderStr = " (U.gender = '" + search_TrainerGender + " and ') ";
 
             string sportCategoriesStr = "and (USC.CategoryCode = " + scl[0];
             for (int i = 1; i < scl.Count; i++)
@@ -412,7 +412,7 @@ public class DBservices
                 "inner join CurrentOnlineTrainer as COT on COT.OnlineCode = OHT.OnlineCode " +
                 "inner join UserSportCategories as USC on USC.UserCode = U.UserCode " +
                 "where " + trainerGenderStr +
-                " and(T.PersonalTrainingPrice between " + search_MinBudget + " and " + search_MaxBudget + ") " +
+                "(T.PersonalTrainingPrice between " + search_MinBudget + " and " + search_MaxBudget + ") " +
                 "and(OHT.StartTime <= '" + o.EndTime + "' and OHT.EndTime >= '" + o.StartTime + "') " +
                 sportCategoriesStr;
 
@@ -560,6 +560,7 @@ public class DBservices
 
     }
 
+    //השאילתה מחשבת את המרחק בין 2 קואורדינטות
     private double distances(double lat1, double lon1, double lat2, double lon2, char unit)
     {
         if ((lat1 == lat2) && (lon1 == lon2))
@@ -595,6 +596,7 @@ public class DBservices
         return (deg * Math.PI / 180.0);
     }
 
+    //הפונקציה מכניסה חיפוש של מתאמן למערכת ובנוסף מבצעת את החיפושים בהתאם למה שהמשתמש הכניס
     public List<Result> InsertOnlineTrainee(OnlineHistoryTrainee o)
     {
         SqlConnection con;
@@ -686,6 +688,7 @@ public class DBservices
 
     }
 
+    //הפונקציה מכניסה מאמן פעיל למערכת
     public void InsertOnlineTrainer(OnlineHistoryTrainer o)
     {
         SqlConnection con;

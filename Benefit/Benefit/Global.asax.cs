@@ -43,7 +43,7 @@ namespace Benefit
 
 
             //&& DateTime.Now.ToString("HH:mm tt") == "00:00"
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday  && DateTime.Now.ToString("HH") == "19")
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday  && DateTime.Now.ToString("HH") == "17")
             {
                 //Console.Beep(300, 1000);
                 DBservices db = new DBservices();

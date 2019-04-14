@@ -23,7 +23,7 @@ namespace Benefit.Models
 
         public List<Result> InsertOnlineTrainee(OnlineHistoryTrainee o)
         {
-            DBservices dbs = new DBservices();
+           DBservices dbs = new DBservices();
             return dbs.InsertOnlineTrainee(o);
         }
 

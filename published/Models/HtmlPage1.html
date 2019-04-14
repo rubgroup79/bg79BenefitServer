@@ -78,22 +78,22 @@
             // ADD ONLINE TRAINEE
             //--------------------------------------------------------------------
 
-            //onlinehistorytrainee = {
-            //    UserCode: 10,
-            //    Latitude: 32.360869,
-            //    Longitude: 34.862154,
-            //    StartTime: "2019-04-03 08:00:00.123",
-            //    EndTime: "2019-04-03 14:00:00.123",
-            //    WithTrainer: 0,
-            //    WithPartner: 1,
-            //    GroupWithTrainer: 0,
-            //    GroupWithPartners: 0
-            //}
+            onlinehistorytrainee = {
+                UserCode: 28,
+                Latitude: 32.3051727,
+                Longitude: 35.006397,
+                StartTime: "2019-04-11 15:27:00.123",
+                EndTime: "2019-04-11 23:00:00.123",
+                WithTrainer: 1,
+                WithPartner: 1,
+                GroupWithTrainer: 0,
+                GroupWithPartners: 0
+            }
 
-            //obj = JSON.stringify(onlinehistorytrainee);
-            //console.log(obj);
-            //ajaxCall("POST", "../api/insertonlinetrainee", obj, successInsertOnline, error);
-            //ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline, error);
+            obj = JSON.stringify(onlinehistorytrainee);
+            console.log(obj);
+            ajaxCall("POST", "../api/insertonlinetrainee", obj, successInsertOnline, error);
+            //ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline1, error);
 
             //delete from db 
            // ajaxcall("GET", "../api/DeleteNotActive", obj, success1, error);
@@ -133,8 +133,8 @@
                 //}
 
                 //obj = JSON.stringify(HistoryGroupTraining);
-            //    console.log(obj);
-            //    ajaxCall("POST", "../api/InsertGroupTraining", obj, successInsertOnline, error);
+                //console.log(obj);
+                //ajaxCall("POST", "../api/InsertGroupTraining", obj, successInsertOnline, error);
 
         
             //details = {
@@ -148,8 +148,8 @@
             //--------------------------------------------------------------------
             // check function GET LAZY TRAINEES
             //--------------------------------------------------------------------
-
-           ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
+           // ajaxCall("GET", "../api/GetPrefferedDay", "", successGetLazy, error);
+           //ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
            // ajaxCall("GET", "../api/getLazyTrainers", "", successGetLazy, error);
             //ajaxCall("GET", "../api/start", "", successGetLazy, error);
  
@@ -172,6 +172,11 @@
 
 
         function successInsertOnline(data) {
+            console.log(data);
+        }
+
+
+        function successInsertOnline1(data) {
             console.log(data);
         }
 
