@@ -78,22 +78,22 @@
             // ADD ONLINE TRAINEE
             //--------------------------------------------------------------------
 
-            onlinehistorytrainee = {
-                UserCode: 28,
-                Latitude: 32.3051727,
-                Longitude: 35.006397,
-                StartTime: "2019-04-11 15:27:00.123",
-                EndTime: "2019-04-11 23:00:00.123",
-                WithTrainer: 1,
-                WithPartner: 1,
-                GroupWithTrainer: 1,
-                GroupWithPartners: 1
-            }
+            //onlinehistorytrainee = {
+            //    UserCode: 28,
+            //    Latitude: 32.3051727,
+            //    Longitude: 35.006397,
+            //    StartTime: "2019-04-11 15:27:00.123",
+            //    EndTime: "2019-04-11 23:00:00.123",
+            //    WithTrainer: 1,
+            //    WithPartner: 1,
+            //    GroupWithTrainer: 1,
+            //    GroupWithPartners: 1
+            //}
 
-            obj = JSON.stringify(onlinehistorytrainee);
-            console.log(obj);
-            ajaxCall("POST", "../api/insertonlinetrainee", obj, successInsertOnline, error);
-            ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline1, error);
+            //obj = JSON.stringify(onlinehistorytrainee);
+            //console.log(obj);
+            //ajaxCall("POST", "../api/insertonlinetrainee", obj, successInsertOnline, error);
+            //ajaxCall("POST", "../api/SearchGroups", obj, successInsertOnline1, error);
 
             //delete from db 
            // ajaxcall("GET", "../api/DeleteNotActive", obj, success1, error);
@@ -149,9 +149,16 @@
             // check function GET LAZY TRAINEES
             //--------------------------------------------------------------------
            // ajaxCall("GET", "../api/GetPrefferedDay", "", successGetLazy, error);
-           ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
+           //ajaxCall("GET", "../api/getLazyTrainees", "", successGetLazy, error);
            // ajaxCall("GET", "../api/getLazyTrainers", "", successGetLazy, error);
             //ajaxCall("GET", "../api/start", "", successGetLazy, error);
+
+			//Suggestion = {
+			//	SenderCode: 28,
+			//	ReciverCode: 29
+			//}
+			//obj = JSON.stringify(Suggestion);
+			ajaxCall("GET", "../api/SendSuggestion?SenderCode=28&ReceiverCode=29","", success1, error);
  
         });
 
@@ -159,14 +166,14 @@
         // send push notifications to lazy trainees/trainers 
         function successGetLazy(data) {
             console.log(data);
-            for (var i = 0; i < data.length; i++) {
-                var pnd = {
-                    to: data[i].Token,
-                    title: 'Long Time No See',
-                    body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
-                    badge: 1
-                }
-                ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
+            //for (var i = 0; i < data.length; i++) {
+            //    var pnd = {
+            //        to: data[i].Token,
+            //        title: 'Long Time No See',
+            //        body: 'Hi ' + data[i].FirstName + ", we've missed you! ",
+            //        badge: 1
+            //    }
+            //    ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
             //}
         }
 

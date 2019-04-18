@@ -1164,11 +1164,49 @@ public class DBservices
 
     }
 
+  public void SendSuggestion(int SenderCode, int ReceiverCode)
+	{
 
-    //--------------------------------------------------------------------
-    // Build the Insert command String
-    //--------------------------------------------------------------------
-    private String BuildInsertUserCommand(User u)
+		SqlConnection con;
+		SqlCommand cmd;
+
+		try
+		{
+			con = connect("BenefitConnectionStringName");
+		}
+		catch (Exception ex)
+		{
+			throw (ex);
+		}
+
+
+
+		try
+		{
+			String pStr = BuildInsertSuggestionCommand(SenderCode, ReceiverCode);
+			cmd = CreateCommand(pStr, con);
+			cmd.ExecuteNonQuery();
+
+		}
+		catch (Exception ex)
+		{
+			throw (ex);
+		}
+
+		finally
+		{
+			if (con != null)
+			{
+				con.Close();
+			}
+		}
+
+	}
+
+	//--------------------------------------------------------------------
+	// Build the Insert command String
+	//--------------------------------------------------------------------
+	private String BuildInsertUserCommand(User u)
     {
         String command;
         StringBuilder sb = new StringBuilder();
@@ -1288,10 +1326,23 @@ public class DBservices
         return command;
     }
 
-    //---------------------------------------------------------------------------------
-    // Create the SqlCommand
-    //---------------------------------------------------------------------------------
-    private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
+
+
+	private String BuildInsertSuggestionCommand(int SenderCode, int ReceiverCode)
+	{
+		String command;
+		StringBuilder sb = new StringBuilder();
+
+		sb.AppendFormat("Values({0},{1},{2}, {3})", SenderCode.ToString(), ReceiverCode.ToString(), "getdate()", 4);
+		String prefix = "INSERT INTO CoupleTrainingSuggestions (SenderCode, ReceiverCode, SendingTime, StatusCode) ";
+		command = prefix + sb.ToString();
+		return command;
+	}
+
+	//---------------------------------------------------------------------------------
+	// Create the SqlCommand
+	//---------------------------------------------------------------------------------
+	private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
     {
 
         SqlCommand cmd = new SqlCommand(); // create the command object

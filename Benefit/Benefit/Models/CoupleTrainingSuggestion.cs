@@ -21,6 +21,17 @@ namespace Benefit.Models
             SendingTime = _sendingTime;
         }
 
+		public CoupleTrainingSuggestion()
+		{
 
-    }
+		}
+
+		public void SendSuggestion(int SenderCode, int ReceiverCode)
+		{
+			DBservices dbs = new DBservices();
+			dbs.SendSuggestion(SenderCode, ReceiverCode);
+		}
+
+
+	}
 }
