@@ -158,7 +158,7 @@
 			//	ReciverCode: 29
 			//}
 			//obj = JSON.stringify(Suggestion);
-			ajaxCall("GET", "../api/SendSuggestion?SenderCode=28&ReceiverCode=29","", success1, error);
+			ajaxCall("GET", "../api/SendSuggestion?SenderCode=28&ReceiverCode=29", "", successSendSuggestion, error);
  
         });
 
@@ -177,6 +177,20 @@
             //}
         }
 
+		// send push notifications to lazy trainees/trainers 
+		function successSendSuggestion(data) {
+			console.log(data);
+
+			var pnd = {
+				to: data,
+				title: 'You have a new suggestion!',
+				body: '///// ',
+				badge: 1
+			}
+
+			    ajaxCall("POST", "../sendpushnotification", JSON.stringify(pnd), success1, error);
+			
+		}
 
         function successInsertOnline(data) {
             console.log(data);

@@ -1164,7 +1164,7 @@ public class DBservices
 
     }
 
-  public void SendSuggestion(int SenderCode, int ReceiverCode)
+  public string SendSuggestion(int SenderCode, int ReceiverCode)
 	{
 
 		SqlConnection con;
@@ -1179,14 +1179,13 @@ public class DBservices
 			throw (ex);
 		}
 
-
-
 		try
 		{
 			String pStr = BuildInsertSuggestionCommand(SenderCode, ReceiverCode);
 			cmd = CreateCommand(pStr, con);
 			cmd.ExecuteNonQuery();
-
+			return GetToken(ReceiverCode);
+		
 		}
 		catch (Exception ex)
 		{
@@ -1202,6 +1201,50 @@ public class DBservices
 		}
 
 	}
+
+	public string GetToken(int UserCode)
+	{
+
+		SqlConnection con = null;
+		string token = "";
+
+		try
+		{
+			con = connect("BenefitConnectionStringName");
+
+			String selectSTR = "select Users.Token from Users where Users.UserCode='" + UserCode+ "'";
+			SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+			SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+			if (dr.Read())
+			{
+
+				token=  Convert.ToString(dr["Token"]);
+				
+				return token;
+			}
+			else
+			{
+			
+				return null;
+			}
+
+		}
+		catch (Exception ex)
+		{
+			throw (ex);
+		}
+		finally
+		{
+			if (con != null)
+			{
+				con.Close();
+			}
+
+		}
+
+	}
+
 
 	//--------------------------------------------------------------------
 	// Build the Insert command String

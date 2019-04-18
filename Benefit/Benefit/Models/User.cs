@@ -43,8 +43,13 @@ namespace Benefit.Models
         }
 
         
+		public string GetToken(int UserCode)
+		{
+			DBservices dbs = new DBservices();
+			return dbs.GetToken(UserCode);
+		}
 
 
 
-    }
+	}
 }

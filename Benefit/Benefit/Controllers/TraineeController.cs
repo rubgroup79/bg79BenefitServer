@@ -35,10 +35,18 @@ namespace Benefit.Controllers
 
 		[HttpGet]
 		[Route("api/SendSuggestion")]
-		public void SendSuggestion(int SenderCode, int ReceiverCode)
+		public string SendSuggestion(int SenderCode, int ReceiverCode)
 		{
 			CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
-			s.SendSuggestion(SenderCode, ReceiverCode);
+			return s.SendSuggestion(SenderCode, ReceiverCode);
+		}
+
+		[HttpGet]
+		[Route("api/GetToken")]
+		public string GetToken(int UserCode)
+		{
+			User u = new User();
+			return u.GetToken(UserCode);
 		}
 
 	}

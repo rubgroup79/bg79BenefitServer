@@ -26,10 +26,10 @@ namespace Benefit.Models
 
 		}
 
-		public void SendSuggestion(int SenderCode, int ReceiverCode)
+		public string SendSuggestion(int SenderCode, int ReceiverCode)
 		{
 			DBservices dbs = new DBservices();
-			dbs.SendSuggestion(SenderCode, ReceiverCode);
+			return dbs.SendSuggestion(SenderCode, ReceiverCode);
 		}
 
 
