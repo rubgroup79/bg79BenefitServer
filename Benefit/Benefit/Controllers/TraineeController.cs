@@ -33,21 +33,8 @@ namespace Benefit.Controllers
             t.JoinGroup(UserCode, GroupTrainingCode);
         }
 
-		[HttpGet]
-		[Route("api/SendSuggestion")]
-		public string SendSuggestion(int SenderCode, int ReceiverCode)
-		{
-			CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
-			return s.SendSuggestion(SenderCode, ReceiverCode);
-		}
+		
 
-		[HttpGet]
-		[Route("api/GetToken")]
-		public string GetToken(int UserCode)
-		{
-			User u = new User();
-			return u.GetToken(UserCode);
-		}
 
 	}
 }

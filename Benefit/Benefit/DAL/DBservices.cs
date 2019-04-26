@@ -1202,7 +1202,40 @@ public class DBservices
 
 	}
 
-	public string GetToken(int UserCode)
+    public void ReplySuggestion(int SuggestionCode, bool Reply)
+    {
+
+        SqlConnection con=null;
+        SqlCommand cmd;
+        int StatusCode=0;
+        if (Reply == true) StatusCode = 5;
+        else StatusCode = 6;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+            String selectSTR = "Update CoupleTrainingSuggestions set StatusCode='" + StatusCode + "' where SuggestionCode='" + SuggestionCode+"'";
+            cmd = new SqlCommand(selectSTR, con);
+            cmd.ExecuteNonQuery();
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+
+    public string GetToken(int UserCode)
 	{
 
 		SqlConnection con = null;
@@ -1245,11 +1278,115 @@ public class DBservices
 
 	}
 
+    //get pending suggestions - Sender=true if the usercode is the sender, false if he is receivrr
+    public List<CoupleTrainingSuggestion> GetPendingSuggestions(int UserCode,bool Sender)
+    {
+        SqlConnection con = null;
+        SqlCommand cmd;
+        string str = null;
+        if (Sender) str = "SenderCode"; else str = "ReceiverCode";
+        try
+        {
+            con = connect("BenefitConnectionStringName");
 
-	//--------------------------------------------------------------------
-	// Build the Insert command String
-	//--------------------------------------------------------------------
-	private String BuildInsertUserCommand(User u)
+            String selectSTR = "select CTS.SuggestionCode" +
+                " from CoupleTrainingSuggestions CTS inner" +
+                " join Users U on CTS.SenderCode = U.UserCode" +
+                " where CTS."+str+"="+UserCode+" and CTS.StatusCode = 4";
+
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            List<CoupleTrainingSuggestion> ctsl = new List<CoupleTrainingSuggestion>();
+                
+      
+            while (dr.Read())
+            {
+                CoupleTrainingSuggestion cts = new CoupleTrainingSuggestion();
+                cts.SuggestionCode = Convert.ToInt32(dr["SuggestionCode"]);
+                ctsl.Add(cts);
+            }
+
+            return ctsl;
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+  
+
+
+    public List<Result> GetSuggestionDetails(int SuggestionCode)
+    {
+        SqlConnection con = null;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            String selectSTR = "select CTS.SenderCode, U.FirstName, U.LastName,datediff(year, U.DateOfBirth, getdate()) as Age, U.Picture,OHT.Latitude,OHT.Longitude" +
+                " from CoupleTrainingSuggestions CTS inner " +
+                "join Users U on CTS.SenderCode = U.UserCode inner " +
+                "join OnlineHistoryTrainee as OHT on OHT.TraineeCode = CTS.SenderCode " +
+                " inner join CurrentOnlineTrainee as C on C.OnlineCode=OHT.OnlineCode" +
+                " where CTS.SuggestionCode = "+SuggestionCode+" and CTS.StatusCode = 4";
+
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            List<Result> rl = new List<Result>();
+
+
+            while (dr.Read())
+            {
+                Result r = new Result();
+                r.UserCode = Convert.ToInt32(dr["SenderCode"]);
+                r.FirstName = Convert.ToString(dr["FirstName"]);
+                r.LastName = Convert.ToString(dr["LastName"]);
+                r.Age = Convert.ToInt32(dr["Age"]);
+                r.Picture = Convert.ToString(dr["Picture"]);
+                string _lat = Convert.ToString(dr["Latitude"]);
+                r.Latitude = float.Parse(_lat);
+                string _long = Convert.ToString(dr["Longitude"]);
+                r.Longitude = float.Parse(_long);
+                rl.Add(r);
+            }
+
+            return rl;
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------
+    // Build the Insert command String
+    //--------------------------------------------------------------------
+    private String BuildInsertUserCommand(User u)
     {
         String command;
         StringBuilder sb = new StringBuilder();

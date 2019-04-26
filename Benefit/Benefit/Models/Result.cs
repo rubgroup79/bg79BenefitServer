@@ -22,7 +22,7 @@ namespace Benefit.Models
         public double Distance { get; set; }
 
         public Result( int _userCode, string _firstName, string _lastName, string _gender, int _age, float _latitude, float _longitude, string _startTime, string _endTime, string _picture, int _price, int _isTrainer, double _distance)
-            
+       
         {
             UserCode = _userCode;
             FirstName = _firstName;

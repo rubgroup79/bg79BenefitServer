@@ -32,6 +32,28 @@ namespace Benefit.Models
 			return dbs.SendSuggestion(SenderCode, ReceiverCode);
 		}
 
+        public void ReplySuggestion(int SuggestionCode, bool reply)
+        {
+            DBservices dbs = new DBservices();
+            dbs.ReplySuggestion(SuggestionCode, reply);
+        }
 
-	}
+        public List<CoupleTrainingSuggestion> GetPendingSuggestions(int UserCode,bool Sender)
+        {
+            DBservices dbs = new DBservices();
+           return dbs.GetPendingSuggestions(UserCode, Sender);
+        }
+
+        public List<Result> GetSuggestionDetails(int SuggestionCode)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.GetSuggestionDetails(SuggestionCode);
+        }
+
+        public List<CoupleTrainingSuggestion> GetSentSuggestions(int UserCode)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.GetSentSuggestions(UserCode);
+        }
+    }
 }

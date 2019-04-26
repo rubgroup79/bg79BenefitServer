@@ -69,6 +69,16 @@ namespace Benefit.Controllers
 
         }
 
+        //returns token for user 
+        [HttpGet]
+        [Route("api/GetToken")]
+        public string GetToken(int UserCode)
+        {
+            User u = new User();
+            return u.GetToken(UserCode);
+        }
+
+
         [HttpGet]
         [Route("api/GetPrefferedDay")]
         public List<PrefferedDay> GetPrefferedTrainingDay()
