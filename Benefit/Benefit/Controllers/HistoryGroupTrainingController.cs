@@ -24,7 +24,14 @@ namespace Benefit.Controllers
             h.InsertGroupTraining(h);
         }
 
-        
+
+        [HttpGet]
+        [Route("api/GetFutureTrainings")]
+        public IEnumerable<CoupleTraining> GetFutureTrainings(int UserCode)
+        {
+            CoupleTraining c = new CoupleTraining();
+            return c.GetFutureTrainings(UserCode);
+        }
 
     }
 }

@@ -38,10 +38,10 @@ namespace Benefit.Models
             dbs.ReplySuggestion(SuggestionCode, reply);
         }
 
-        public List<CoupleTrainingSuggestion> GetPendingSuggestions(int UserCode,bool Sender)
+        public List<CoupleTrainingSuggestion> GetSuggestions(int UserCode,bool Sender, bool IsApproved)
         {
             DBservices dbs = new DBservices();
-           return dbs.GetPendingSuggestions(UserCode, Sender);
+           return dbs.GetSuggestions(UserCode, Sender, IsApproved);
         }
 
         public List<Result> GetSuggestionDetails(int SuggestionCode)
@@ -50,10 +50,7 @@ namespace Benefit.Models
             return dbs.GetSuggestionDetails(SuggestionCode);
         }
 
-        public List<CoupleTrainingSuggestion> GetSentSuggestions(int UserCode)
-        {
-            DBservices dbs = new DBservices();
-            return dbs.GetSentSuggestions(UserCode);
-        }
+      
+
     }
 }

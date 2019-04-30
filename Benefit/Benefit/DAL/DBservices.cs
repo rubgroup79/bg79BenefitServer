@@ -1279,12 +1279,14 @@ public class DBservices
 	}
 
     //get pending suggestions - Sender=true if the usercode is the sender, false if he is receivrr
-    public List<CoupleTrainingSuggestion> GetPendingSuggestions(int UserCode,bool Sender)
+    public List<CoupleTrainingSuggestion> GetSuggestions(int UserCode,bool Sender, bool IsApproved)
     {
         SqlConnection con = null;
         SqlCommand cmd;
-        string str = null;
-        if (Sender) str = "SenderCode"; else str = "ReceiverCode";
+        string SenderStr = null;
+        if (Sender) SenderStr = "SenderCode"; else SenderStr = "ReceiverCode";
+        string IsApprovedStr = null;
+        if (IsApproved) IsApprovedStr = "5"; else IsApprovedStr = "4";
         try
         {
             con = connect("BenefitConnectionStringName");
@@ -1292,7 +1294,7 @@ public class DBservices
             String selectSTR = "select CTS.SuggestionCode" +
                 " from CoupleTrainingSuggestions CTS inner" +
                 " join Users U on CTS.SenderCode = U.UserCode" +
-                " where CTS."+str+"="+UserCode+" and CTS.StatusCode = 4";
+                " where CTS."+ SenderStr + "="+UserCode+" and CTS.StatusCode = "+ IsApprovedStr;
 
             cmd = new SqlCommand(selectSTR, con);
             SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -1382,6 +1384,58 @@ public class DBservices
         }
 
     }
+
+    public List<CoupleTraining> GetFutureTrainings(int UserCode)
+    {
+        SqlConnection con = null;
+        SqlCommand cmd;
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+            String selectSTR = "select CT.CoupleTrainingCode, CT.Latitude,CT.Longitude,CT.TrainingTime,CT.WithTrainer " +
+                "from CoupleTraining as CT inner join CoupleTrainingSuggestions AS CTS on CT.SuggestionCode = CTS.SuggestionCode " +
+                "where(CTS.SenderCode = 2 or CTS.ReceiverCode = 2) and(datediff(hour, getdate(), CT.TrainingTime) > 0)";
+
+            cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+        
+            List<CoupleTraining> ct = new List<CoupleTraining>();
+
+
+            while (dr.Read())
+            {
+                CoupleTraining c = new CoupleTraining();
+                c.TrainingCode= Convert.ToInt32(dr["CoupleTrainingCode"]);
+                c.TrainingTime = Convert.ToString(dr["TrainingTime"]);
+                string _lat = Convert.ToString(dr["Latitude"]);
+                c.Latitude = float.Parse(_lat);
+                string _long = Convert.ToString(dr["Longitude"]);
+                c.Longitude = float.Parse(_long);
+                c.WithTrainer= Convert.ToInt32(dr["WithTrainer"]);
+                
+                ct.Add(c);
+            }
+
+            return ct;
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+
 
     //--------------------------------------------------------------------
     // Build the Insert command String

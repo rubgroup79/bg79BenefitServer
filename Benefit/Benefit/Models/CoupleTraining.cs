@@ -14,6 +14,11 @@ namespace Benefit.Models
         {
         }
 
-
+        public CoupleTraining() { }
+        public List<CoupleTraining> GetFutureTrainings(int UserCode)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.GetFutureTrainings(UserCode);
+        }
     }
 }
