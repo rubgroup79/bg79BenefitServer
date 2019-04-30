@@ -204,6 +204,7 @@
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Models\CurrentOnlineTrainee.cs" />
     <Compile Include="Models\OnlineHistory.cs" />
+    <Compile Include="Models\SuggestionResult.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\OnlineHistoryTrainer.cs" />
     <Compile Include="Models\CoupleTrainingSuggestion.cs" />

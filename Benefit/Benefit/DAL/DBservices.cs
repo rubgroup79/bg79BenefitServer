@@ -1033,18 +1033,18 @@ public class DBservices
 
             // השאילתא מחזירה את כל המתאמנים שהתאמנו יותר מפעמיים באותו יום
             String selectSTR = "SELECT distinct RES.TraineeCode, RES.Token " +
-                "FROM(Select  T.TraineeCode, U.Token, " +
-                "case when  DATENAME(dw, CT.TrainingTime) = 'Sunday' then count(T.TraineeCode) " +
-                "when  DATENAME(dw, CT.TrainingTime) = 'Monday' then count(T.TraineeCode) " +
-                "when  DATENAME(dw, CT.TrainingTime) = 'Tuesday' then count(T.TraineeCode) " +
-                "when  DATENAME(dw, CT.TrainingTime) = 'Wednesday'  then count(T.TraineeCode) " +
-                "when  DATENAME(dw, CT.TrainingTime) = 'Thursday' then count(T.TraineeCode) " +
-                "when  DATENAME(dw, CT.TrainingTime) = 'Friday' then count(T.TraineeCode) " +
-                "when  DATENAME(dw, CT.TrainingTime) = 'Saturday' then count(T.TraineeCode) " +
+                "FROM(Select T.TraineeCode, U.Token, " +
+                "case when DATENAME(dw, CT.TrainingTime) = 'Sunday' then count(T.TraineeCode) " +
+                "when DATENAME(dw, CT.TrainingTime) = 'Monday' then count(T.TraineeCode) " +
+                "when DATENAME(dw, CT.TrainingTime) = 'Tuesday' then count(T.TraineeCode) " +
+                "when DATENAME(dw, CT.TrainingTime) = 'Wednesday' then count(T.TraineeCode) " +
+                "when DATENAME(dw, CT.TrainingTime) = 'Thursday' then count(T.TraineeCode) " +
+                "when DATENAME(dw, CT.TrainingTime) = 'Friday' then count(T.TraineeCode) " +
+                "when DATENAME(dw, CT.TrainingTime) = 'Saturday' then count(T.TraineeCode) " +
                 "end as 'NumOfTrainings' " +
-                "from Trainees as T inner join CoupleTrainingSuggestions as CTS on T.TraineeCode = CTS.SenderCode or  T.TraineeCode = CTS.ReceiverCode inner join CoupleTraining as CT ON CT.SuggestionCode = CTS.SuggestionCode inner join  Users as U  on U.UserCode = T.TraineeCode " +
-                "GROUP BY  T.TraineeCode, DATENAME(dw, CT.TrainingTime), U.Token)AS RES " +
-                "GROUP BY RES.TraineeCode,  RES.NumOfTrainings, RES.Token " +
+                "from Trainees as T inner join CoupleTrainingSuggestions as CTS on T.TraineeCode = CTS.SenderCode or T.TraineeCode = CTS.ReceiverCode inner join CoupleTraining as CT ON CT.SuggestionCode = CTS.SuggestionCode inner join Users as U on U.UserCode = T.TraineeCode " +
+                "GROUP BY T.TraineeCode, DATENAME(dw, CT.TrainingTime), U.Token)AS RES " +
+                "GROUP BY RES.TraineeCode, RES.NumOfTrainings, RES.Token " +
                 "HAVING RES.NumOfTrainings >= 2 ";
 
             cmd = new SqlCommand(selectSTR, con);
@@ -1128,8 +1128,8 @@ public class DBservices
                 con.Close();
             }
         }
-
     }
+
     //this function gets num=1 if added a new participants, num=-1 if deleting one participant
     private void UpdateNumOfParticipants(int Num, int GroupTrainingCode)
     {
@@ -1145,8 +1145,7 @@ public class DBservices
                 "'  Update HistoryGroupTraining set StatusCode=3 where CurrentParticipants=MaxParticipants";
             cmd = new SqlCommand(selectSTR, con);
             //int CurrentParticipants = Convert.ToInt32(cmd.ExecuteScalar());
-            cmd.ExecuteNonQuery();
-   
+            cmd.ExecuteNonQuery();  
         }
 
         catch (Exception ex)
@@ -1161,7 +1160,6 @@ public class DBservices
                 con.Close();
             }
         }
-
     }
 
   public string SendSuggestion(int SenderCode, int ReceiverCode)
@@ -1199,7 +1197,6 @@ public class DBservices
 				con.Close();
 			}
 		}
-
 	}
 
     public void ReplySuggestion(int SuggestionCode, bool Reply)
@@ -1231,7 +1228,6 @@ public class DBservices
                 con.Close();
             }
         }
-
     }
 
 
@@ -1261,7 +1257,6 @@ public class DBservices
 			
 				return null;
 			}
-
 		}
 		catch (Exception ex)
 		{
@@ -1273,43 +1268,118 @@ public class DBservices
 			{
 				con.Close();
 			}
-
 		}
-
 	}
 
-    //get pending suggestions - Sender=true if the usercode is the sender, false if he is receivrr
-    public List<CoupleTrainingSuggestion> GetSuggestions(int UserCode,bool Sender, bool IsApproved)
+	public void UpdateSuggestionsStatus()
+	{
+
+		SqlConnection con = null;
+		SqlCommand cmd;
+
+		try
+		{
+			con = connect("BenefitConnectionStringName");
+
+			String selectSTR = "UPDATE CoupleTrainingSuggestions" +
+				" SET StatusCode = 7" +
+				" where CoupleTrainingSuggestions.SenderCode in" +
+				" (select T.TraineeCode" +
+				" from Trainees as T where T.TraineeCode not in" +
+				" (select distinct OHT.TraineeCode" +
+				" from OnlineHistoryTrainee as OHT" +
+				" inner join CurrentOnlineTrainee as CO on CO.OnlineCode = OHT.OnlineCode" +
+				" where datediff(hour, OHT.EndTime, getdate()) < 0 ))" +
+				" or CoupleTrainingSuggestions.ReceiverCode in" +
+				" (select U.UserCode" +
+				" from Users as U where U.UserCode not in" +
+				" (select distinct OHT.TraineeCode" +
+				" from OnlineHistoryTrainee as OHT" +
+				" inner join CurrentOnlineTrainee as CO on CO.OnlineCode = OHT.OnlineCode" +
+				" where datediff(hour, OHT.EndTime, getdate()) < 0 )" +
+				" and U.UserCode not in " +
+				" (select distinct OHT.TrainerCode" +
+				" from OnlineHistoryTrainer as OHT" +
+				" inner join CurrentOnlineTrainer as CO on CO.OnlineCode = OHT.OnlineCode" +
+				" where datediff(hour, OHT.EndTime, getdate()) < 0 ))";
+
+			cmd = new SqlCommand(selectSTR, con);
+			//int CurrentParticipants = Convert.ToInt32(cmd.ExecuteScalar());
+			cmd.ExecuteNonQuery();
+		}
+
+		catch (Exception ex)
+		{
+			throw (ex);
+		}
+
+		finally
+		{
+			if (con != null)
+			{
+				con.Close();
+			}
+		}
+	}
+
+	//get pending suggestions - Sender=true if the usercode is the sender, false if he is receivrr
+	public List<SuggestionResult> GetSuggestions(int UserCode,bool Sender, bool IsApproved)
     {
         SqlConnection con = null;
         SqlCommand cmd;
-        string SenderStr = null;
-        if (Sender) SenderStr = "SenderCode"; else SenderStr = "ReceiverCode";
-        string IsApprovedStr = null;
+		String selectSTR = null;
+
+		string IsApprovedStr = null;
         if (IsApproved) IsApprovedStr = "5"; else IsApprovedStr = "4";
         try
         {
             con = connect("BenefitConnectionStringName");
+			if (Sender)
+			{
+				selectSTR = "select distinct CTS.SuggestionCode, CTS.ReceiverCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
+				" case when CTS.SenderCode =" + UserCode + " then 'true' when CTS.ReceiverCode=" + UserCode + " then 'false' end as IsOut, U.IsTrainer" +
+				" from CoupleTrainingSuggestions CTS inner join Users U on CTS.ReceiverCode = U.UserCode" +
+				" where CTS.SenderCode =" + UserCode + " and CTS.StatusCode = " + IsApprovedStr;
+			}
+			else
+			{
+				selectSTR = "select distinct CTS.SuggestionCode, CTS.SenderCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
+				" case when CTS.SenderCode =" + UserCode + " then 'true' when CTS.ReceiverCode=" + UserCode + " then 'false' end as IsOut, U.IsTrainer" +
+				" from CoupleTrainingSuggestions CTS inner join Users U on CTS.SenderCode = U.UserCode" +
+				" where CTS.ReceiverCode =" + UserCode + " and CTS.StatusCode = " + IsApprovedStr;
+			}
 
-            String selectSTR = "select CTS.SuggestionCode" +
-                " from CoupleTrainingSuggestions CTS inner" +
-                " join Users U on CTS.SenderCode = U.UserCode" +
-                " where CTS."+ SenderStr + "="+UserCode+" and CTS.StatusCode = "+ IsApprovedStr;
-
-            cmd = new SqlCommand(selectSTR, con);
+			cmd = new SqlCommand(selectSTR, con);
             SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-            List<CoupleTrainingSuggestion> ctsl = new List<CoupleTrainingSuggestion>();
-                
-      
+            List<SuggestionResult> srl = new List<SuggestionResult>();
+                      
             while (dr.Read())
             {
-                CoupleTrainingSuggestion cts = new CoupleTrainingSuggestion();
-                cts.SuggestionCode = Convert.ToInt32(dr["SuggestionCode"]);
-                ctsl.Add(cts);
+				SuggestionResult sr = new SuggestionResult();
+                sr.SuggestionCode = Convert.ToInt32(dr["SuggestionCode"]);
+				if(Sender)
+					sr.ReceiverCode = Convert.ToInt32(dr["ReceiverCode"]);
+				else
+					sr.SenderCode = Convert.ToInt32(dr["SenderCode"]);
+
+				sr.StatusCode = Convert.ToInt32(dr["StatusCode"]);
+				sr.SendingTime = Convert.ToString(dr["SendingTime"]);
+				sr.FirstName = Convert.ToString(dr["FirstName"]);
+				sr.LastName = Convert.ToString(dr["LastName"]);
+				sr.Gender = Convert.ToString(dr["Gender"]);
+				sr.Age = Convert.ToInt32(dr["Age"]);
+				sr.Picture = Convert.ToString(dr["Picture"]);
+				sr.IsOut = Convert.ToBoolean(dr["IsOut"]);
+				sr.IsTrainer = Convert.ToBoolean(dr["IsTrainer"]);
+
+				srl.Add(sr);
             }
 
-            return ctsl;
+//להביא את המיקום של כל משתמש שחוזר
+
+
+			return srl;
         }
 
         catch (Exception ex)
@@ -1326,9 +1396,6 @@ public class DBservices
         }
 
     }
-
-  
-
 
     public List<Result> GetSuggestionDetails(int SuggestionCode)
     {

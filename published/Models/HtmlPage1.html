@@ -163,8 +163,7 @@
             //ajaxCall("GET", "../api/GetPendingSuggestions?UserCode=28&Sender=true", "", successSendSuggestion, error);
             //ajaxCall("GET", "../api/GetSuggestionDetails?SuggestionCode=1", "", successSendSuggestion, error);
 
-			ajaxCall("GET", "../api/GetSuggestions?UserCode=28&Sender=true&IsApproved=true", "", successSendSuggestion, error);
-			//ajaxCall("POST", "../api/UpdateSuggestionsStatus", "", successSendSuggestion, error);
+            ajaxCall("GET", "../api/GetSuggestions?UserCode=2&Sender=true&IsApproved=true", "", successSendSuggestion, error);
 
         });
 
@@ -201,6 +200,7 @@
         function successInsertOnline(data) {
             console.log(data);
         }
+
 
         function successInsertOnline1(data) {
             console.log(data);
