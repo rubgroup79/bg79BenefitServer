@@ -24,7 +24,7 @@ namespace Benefit.Controllers
             h.InsertGroupTraining(h);
         }
 
-
+        // move to another controller !! 
         [HttpGet]
         [Route("api/GetFutureTrainings")]
         public IEnumerable<CoupleTraining> GetFutureTrainings(int UserCode)

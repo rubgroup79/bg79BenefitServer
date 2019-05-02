@@ -19,10 +19,9 @@ namespace Benefit.Models
 		public string Picture { get; set; }
         public float Latitude { get; set; }
         public float Longitude { get; set; }
-		public bool IsOut { get; set; }
 		public bool IsTrainer { get; set; }
 
-		public SuggestionResult( int _suggestionCode, int _senderCode, int _receiverCode, int _statusCode, string _sendingTime, string _firstName, string _lastName, string _gender, int _age, string _picture, float _latitude, float _longitude, bool _isOut, bool _isTrainer)
+		public SuggestionResult( int _suggestionCode, int _senderCode, int _receiverCode, int _statusCode, string _sendingTime, string _firstName, string _lastName, string _gender, int _age, string _picture, float _latitude, float _longitude, bool _isTrainer)
         {
 			SuggestionCode = _suggestionCode;
 			SenderCode = _senderCode;
@@ -36,7 +35,6 @@ namespace Benefit.Models
 			Picture = _picture;
 			Latitude = _latitude;
 			Longitude = _longitude;
-			IsOut = _isOut;
 			IsTrainer = _isTrainer;
 	}
 

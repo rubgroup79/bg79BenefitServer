@@ -32,23 +32,14 @@ namespace Benefit.Controllers
             s.ReplySuggestion(SuggestionCode, reply);
         }
 
-        //sender=true כדי לקבל את ההצעות ששלח היוזר 
-        // sender= false כדי לקבל את ההצעות שנשלחו לו 
         [HttpGet]
         [Route("api/GetSuggestions")]
-        public IEnumerable<SuggestionResult> GetSuggestions(int UserCode, bool Sender, bool IsApproved)
+        public IEnumerable<SuggestionResult> GetSuggestions(int UserCode,  bool IsApproved)
         {
             CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
-            return s.GetSuggestions(UserCode, Sender, IsApproved);
+            return s.GetSuggestions(UserCode,  IsApproved);
         }
-
-        [HttpGet]
-        [Route("api/GetSuggestionDetails")]
-        public IEnumerable<Result> GetSuggestionDetails(int SuggestionCode)
-        {
-            CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
-            return s.GetSuggestionDetails(SuggestionCode);
-        }
+        
 
 		[HttpPost]
 		[Route("api/UpdateSuggestionsStatus")]
@@ -57,7 +48,14 @@ namespace Benefit.Controllers
 			CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
 			s.UpdateSuggestionsStatus();
 		}
-		
 
-	}
+        [HttpPost]
+        [Route("api/CancelSuggestion")]
+        public void CancelSuggestion(  int SuggestionCode)
+        {
+            CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
+            s.CancelSuggestion(SuggestionCode);
+        }
+
+    }
 }

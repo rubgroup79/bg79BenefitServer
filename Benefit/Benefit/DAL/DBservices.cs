@@ -1230,6 +1230,35 @@ public class DBservices
         }
     }
 
+    public void CancelSuggestion(int SuggestionCode)
+    {
+
+        SqlConnection con = null;
+        SqlCommand cmd;
+       
+
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+            String selectSTR = "Update CoupleTrainingSuggestions set StatusCode=2 where SuggestionCode='" + SuggestionCode + "'";
+            cmd = new SqlCommand(selectSTR, con);
+            cmd.ExecuteNonQuery();
+        }
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
 
     public string GetToken(int UserCode)
 	{
@@ -1322,64 +1351,82 @@ public class DBservices
 		}
 	}
 
-	//get pending suggestions - Sender=true if the usercode is the sender, false if he is receivrr
-	public List<SuggestionResult> GetSuggestions(int UserCode,bool Sender, bool IsApproved)
+	public List<SuggestionResult> GetSuggestions(int UserCode ,bool IsApproved)
     {
         SqlConnection con = null;
         SqlCommand cmd;
-		String selectSTR = null;
+		String selectSTR1 = null;
 
-		string IsApprovedStr = null;
+        string IsApprovedStr = null;
         if (IsApproved) IsApprovedStr = "5"; else IsApprovedStr = "4";
+
         try
         {
             con = connect("BenefitConnectionStringName");
-			if (Sender)
-			{
-				selectSTR = "select distinct CTS.SuggestionCode, CTS.ReceiverCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
-				" case when CTS.SenderCode =" + UserCode + " then 'true' when CTS.ReceiverCode=" + UserCode + " then 'false' end as IsOut, U.IsTrainer" +
+			
+				selectSTR1 = "select distinct CTS.SuggestionCode, CTS.ReceiverCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
+				"U.IsTrainer" +
 				" from CoupleTrainingSuggestions CTS inner join Users U on CTS.ReceiverCode = U.UserCode" +
 				" where CTS.SenderCode =" + UserCode + " and CTS.StatusCode = " + IsApprovedStr;
-			}
-			else
-			{
-				selectSTR = "select distinct CTS.SuggestionCode, CTS.SenderCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
-				" case when CTS.SenderCode =" + UserCode + " then 'true' when CTS.ReceiverCode=" + UserCode + " then 'false' end as IsOut, U.IsTrainer" +
-				" from CoupleTrainingSuggestions CTS inner join Users U on CTS.SenderCode = U.UserCode" +
-				" where CTS.ReceiverCode =" + UserCode + " and CTS.StatusCode = " + IsApprovedStr;
-			}
-
-			cmd = new SqlCommand(selectSTR, con);
-            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+			
+			cmd = new SqlCommand(selectSTR1, con);
+            SqlDataReader dr1 = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
             List<SuggestionResult> srl = new List<SuggestionResult>();
-                      
-            while (dr.Read())
+
+
+            while (dr1.Read())
             {
 				SuggestionResult sr = new SuggestionResult();
-                sr.SuggestionCode = Convert.ToInt32(dr["SuggestionCode"]);
-				if(Sender)
-					sr.ReceiverCode = Convert.ToInt32(dr["ReceiverCode"]);
-				else
-					sr.SenderCode = Convert.ToInt32(dr["SenderCode"]);
-
-				sr.StatusCode = Convert.ToInt32(dr["StatusCode"]);
-				sr.SendingTime = Convert.ToString(dr["SendingTime"]);
-				sr.FirstName = Convert.ToString(dr["FirstName"]);
-				sr.LastName = Convert.ToString(dr["LastName"]);
-				sr.Gender = Convert.ToString(dr["Gender"]);
-				sr.Age = Convert.ToInt32(dr["Age"]);
-				sr.Picture = Convert.ToString(dr["Picture"]);
-				sr.IsOut = Convert.ToBoolean(dr["IsOut"]);
-				sr.IsTrainer = Convert.ToBoolean(dr["IsTrainer"]);
-
+                sr.SuggestionCode = Convert.ToInt32(dr1["SuggestionCode"]);
+					sr.ReceiverCode = Convert.ToInt32(dr1["ReceiverCode"]);
+                sr.SenderCode = UserCode;
+				sr.StatusCode = Convert.ToInt32(dr1["StatusCode"]);
+				sr.SendingTime = Convert.ToString(dr1["SendingTime"]);
+				sr.FirstName = Convert.ToString(dr1["FirstName"]);
+				sr.LastName = Convert.ToString(dr1["LastName"]);
+				sr.Gender = Convert.ToString(dr1["Gender"]);
+				sr.Age = Convert.ToInt32(dr1["Age"]);
+				sr.Picture = "'"+Convert.ToString(dr1["Picture"])+"'";
+				sr.IsTrainer = Convert.ToBoolean(dr1["IsTrainer"]);
 				srl.Add(sr);
             }
 
-//להביא את המיקום של כל משתמש שחוזר
+            SqlConnection con2 = null;
+            SqlCommand cmd2;
+            String selectSTR2 = null;
+            con2 = connect("BenefitConnectionStringName");
+
+            selectSTR2 = "select distinct CTS.SuggestionCode, CTS.SenderCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
+                "U.IsTrainer" +
+                " from CoupleTrainingSuggestions CTS inner join Users U on CTS.SenderCode = U.UserCode" +
+                " where CTS.ReceiverCode =" + UserCode + " and CTS.StatusCode = " + IsApprovedStr;
+
+            cmd2 = new SqlCommand(selectSTR2, con2);
+            SqlDataReader dr2 = cmd2.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dr2.Read())
+            {
+                SuggestionResult sr = new SuggestionResult();
+                sr.SuggestionCode = Convert.ToInt32(dr2["SuggestionCode"]);
+                    sr.ReceiverCode = UserCode;
+               sr.SenderCode = Convert.ToInt32(dr2["SenderCode"]);
+                sr.StatusCode = Convert.ToInt32(dr2["StatusCode"]);
+                sr.SendingTime = Convert.ToString(dr2["SendingTime"]);
+                sr.FirstName = Convert.ToString(dr2["FirstName"]);
+                sr.LastName = Convert.ToString(dr2["LastName"]);
+                sr.Gender = Convert.ToString(dr2["Gender"]);
+                sr.Age = Convert.ToInt32(dr2["Age"]);
+                sr.Picture = "'" + Convert.ToString(dr2["Picture"]) + "'";
+                sr.IsTrainer = Convert.ToBoolean(dr2["IsTrainer"]);
+                srl.Add(sr);
+            }
 
 
-			return srl;
+            //להביא את המיקום של כל משתמש שחוזר-----------------------
+
+
+            return srl;
         }
 
         catch (Exception ex)
