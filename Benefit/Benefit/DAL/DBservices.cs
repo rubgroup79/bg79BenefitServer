@@ -1310,27 +1310,17 @@ public class DBservices
 		{
 			con = connect("BenefitConnectionStringName");
 
-			String selectSTR = "UPDATE CoupleTrainingSuggestions" +
-				" SET StatusCode = 7" +
-				" where CoupleTrainingSuggestions.SenderCode in" +
-				" (select T.TraineeCode" +
-				" from Trainees as T where T.TraineeCode not in" +
-				" (select distinct OHT.TraineeCode" +
-				" from OnlineHistoryTrainee as OHT" +
-				" inner join CurrentOnlineTrainee as CO on CO.OnlineCode = OHT.OnlineCode" +
-				" where datediff(hour, OHT.EndTime, getdate()) < 0 ))" +
-				" or CoupleTrainingSuggestions.ReceiverCode in" +
-				" (select U.UserCode" +
-				" from Users as U where U.UserCode not in" +
-				" (select distinct OHT.TraineeCode" +
-				" from OnlineHistoryTrainee as OHT" +
-				" inner join CurrentOnlineTrainee as CO on CO.OnlineCode = OHT.OnlineCode" +
-				" where datediff(hour, OHT.EndTime, getdate()) < 0 )" +
-				" and U.UserCode not in " +
-				" (select distinct OHT.TrainerCode" +
-				" from OnlineHistoryTrainer as OHT" +
-				" inner join CurrentOnlineTrainer as CO on CO.OnlineCode = OHT.OnlineCode" +
-				" where datediff(hour, OHT.EndTime, getdate()) < 0 ))";
+            String selectSTR = "UPDATE CoupleTrainingSuggestions SET StatusCode = 7" +
+                " where CoupleTrainingSuggestions.SenderCode not in " +
+                "(select OHT.TraineeCode from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as C " +
+                " on OHT.OnlineCode = C.OnlineCode) or " +
+                "(CoupleTrainingSuggestions.ReceiverCode not in " +
+                "(select OHT.TraineeCode" +
+                "from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as C" +
+                " on OHT.OnlineCode = C.OnlineCode) " +
+                "and CoupleTrainingSuggestions.ReceiverCode not in " +
+                " ( select OHT.TrainerCode from OnlineHistoryTrainer as OHT inner join" +
+                " CurrentOnlineTrainer as C on OHT.OnlineCode = C.OnlineCode) )";
 
 			cmd = new SqlCommand(selectSTR, con);
 			//int CurrentParticipants = Convert.ToInt32(cmd.ExecuteScalar());
@@ -1507,16 +1497,17 @@ public class DBservices
         {
             con = connect("BenefitConnectionStringName");
 
-            String selectSTR = "select CT.CoupleTrainingCode, CT.Latitude,CT.Longitude,CT.TrainingTime,CT.WithTrainer " +
-                "from CoupleTraining as CT inner join CoupleTrainingSuggestions AS CTS on CT.SuggestionCode = CTS.SuggestionCode " +
-                "where(CTS.SenderCode = 2 or CTS.ReceiverCode = 2) and(datediff(hour, getdate(), CT.TrainingTime) > 0)";
-
-            cmd = new SqlCommand(selectSTR, con);
+            String selectSTR = "select  CT.CoupleTrainingCode, CT.Latitude,CT.Longitude,CT.TrainingTime,CT.WithTrainer, case when CTS.SenderCode = 2 then CTS.ReceiverCode when CTS.ReceiverCode = 2 then CTS.SenderCode end as PartnerCode" +
+                " ,DATEDIFF(year, U.DateOfBirth, getdate()) as Age, U.FirstName, U.LastName, U.Picture " +
+                "from CoupleTraining as CT inner join CoupleTrainingSuggestions AS CTS " +
+                "on CT.SuggestionCode = CTS.SuggestionCode inner join Users as U on U.UserCode = " +
+                "case when CTS.SenderCode =" + UserCode + " then CTS.ReceiverCode when CTS.ReceiverCode=" + UserCode + " then CTS.SenderCode end " +
+                " where(CTS.SenderCode ="+UserCode+ " or CTS.ReceiverCode=" + UserCode + ") and(datediff(hour, getdate(), CT.TrainingTime) > 0)";
+          
+                cmd = new SqlCommand(selectSTR, con);
             SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
         
             List<CoupleTraining> ct = new List<CoupleTraining>();
-
-
             while (dr.Read())
             {
                 CoupleTraining c = new CoupleTraining();
@@ -1527,7 +1518,11 @@ public class DBservices
                 string _long = Convert.ToString(dr["Longitude"]);
                 c.Longitude = float.Parse(_long);
                 c.WithTrainer= Convert.ToInt32(dr["WithTrainer"]);
-                
+                c.PartnerFirstName = Convert.ToString(dr["FirstName"]);
+                c.PartnerLastName = Convert.ToString(dr["LastName"]);
+                c.PartnerAge = Convert.ToInt32(dr["Age"]);
+                c.PartnerPicture = Convert.ToString(dr["Picture"]);
+
                 ct.Add(c);
             }
 

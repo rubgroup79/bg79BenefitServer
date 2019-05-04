@@ -57,5 +57,15 @@ namespace Benefit.Controllers
             s.CancelSuggestion(SuggestionCode);
         }
 
+        // move to another controller ?!! 
+        [HttpGet]
+        [Route("api/GetFutureTrainings")]
+        public IEnumerable<CoupleTraining> GetFutureTrainings(int UserCode)
+        {
+            CoupleTraining c = new CoupleTraining();
+            return c.GetFutureTrainings(UserCode);
+        }
+
+
     }
 }
