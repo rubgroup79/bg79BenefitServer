@@ -1300,7 +1300,7 @@ public class DBservices
 		}
 	}
 
-	public void UpdateSuggestionsStatus()
+	public void UpdateSuggestionsStatus(int UserCode)
 	{
 
 		SqlConnection con = null;
@@ -1310,19 +1310,20 @@ public class DBservices
 		{
 			con = connect("BenefitConnectionStringName");
 
-            String selectSTR = "UPDATE CoupleTrainingSuggestions SET StatusCode = 7" +
-                " where CoupleTrainingSuggestions.SenderCode not in " +
-                "(select OHT.TraineeCode from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as C " +
-                " on OHT.OnlineCode = C.OnlineCode) or " +
-                "(CoupleTrainingSuggestions.ReceiverCode not in " +
-                "(select OHT.TraineeCode" +
-                "from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as C" +
-                " on OHT.OnlineCode = C.OnlineCode) " +
+            String selectSTR = "UPDATE CoupleTrainingSuggestions " +
+                "SET StatusCode = 7 " +
+                "where(CoupleTrainingSuggestions.SenderCode = "+ UserCode + " or CoupleTrainingSuggestions.ReceiverCode = " + UserCode +") " +
+                "and(CoupleTrainingSuggestions.SenderCode not in " +
+                "(select OHT.TraineeCode " +
+                "from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as C  on OHT.OnlineCode = C.OnlineCode) " +
+                "or(CoupleTrainingSuggestions.ReceiverCode not in " +
+                "(select OHT.TraineeCode from OnlineHistoryTrainee as OHT inner join CurrentOnlineTrainee as C on OHT.OnlineCode = C.OnlineCode) " +
                 "and CoupleTrainingSuggestions.ReceiverCode not in " +
-                " ( select OHT.TrainerCode from OnlineHistoryTrainer as OHT inner join" +
-                " CurrentOnlineTrainer as C on OHT.OnlineCode = C.OnlineCode) )";
+                "(select OHT.TrainerCode " +
+                "from OnlineHistoryTrainer as OHT inner join CurrentOnlineTrainer as C on OHT.OnlineCode = C.OnlineCode)))";
 
-			cmd = new SqlCommand(selectSTR, con);
+
+            cmd = new SqlCommand(selectSTR, con);
 			//int CurrentParticipants = Convert.ToInt32(cmd.ExecuteScalar());
 			cmd.ExecuteNonQuery();
 		}
@@ -1343,6 +1344,7 @@ public class DBservices
 
 	public List<SuggestionResult> GetSuggestions(int UserCode ,bool IsApproved)
     {
+        UpdateSuggestionsStatus(UserCode);
         SqlConnection con = null;
         SqlCommand cmd;
 		String selectSTR1 = null;
@@ -1377,7 +1379,7 @@ public class DBservices
 				sr.LastName = Convert.ToString(dr1["LastName"]);
 				sr.Gender = Convert.ToString(dr1["Gender"]);
 				sr.Age = Convert.ToInt32(dr1["Age"]);
-				sr.Picture = "'"+Convert.ToString(dr1["Picture"])+"'";
+				sr.Picture = Convert.ToString(dr1["Picture"]);
 				sr.IsTrainer = Convert.ToBoolean(dr1["IsTrainer"]);
 				srl.Add(sr);
             }

@@ -52,11 +52,11 @@ namespace Benefit.Models
 
         
 
-        public void UpdateSuggestionsStatus()
-		{
-			DBservices dbs = new DBservices();
-			dbs.UpdateSuggestionsStatus();
-		}
+  //      public void UpdateSuggestionsStatus()
+		//{
+		//	DBservices dbs = new DBservices();
+		//	dbs.UpdateSuggestionsStatus();
+		//}
 
         public void CancelSuggestion(int SuggestionCode)
         {

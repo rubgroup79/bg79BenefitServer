@@ -41,13 +41,13 @@ namespace Benefit.Controllers
         }
         
 
-		[HttpPost]
-		[Route("api/UpdateSuggestionsStatus")]
-		public void UpdateSuggestionsStatus()
-		{
-			CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
-			s.UpdateSuggestionsStatus();
-		}
+		//[HttpPost]
+		//[Route("api/UpdateSuggestionsStatus")]
+		//public void UpdateSuggestionsStatus()
+		//{
+		//	CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
+		//	s.UpdateSuggestionsStatus();
+		//}
 
         [HttpPost]
         [Route("api/CancelSuggestion")]
