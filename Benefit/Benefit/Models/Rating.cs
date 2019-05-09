@@ -11,13 +11,10 @@ namespace Benefit.Models
         public int TraineeCode { get; set; }
         public int RatedCode { get; set; }
  
-
         public Rating(int _traineeCode, int _ratedCode)
         {
             TraineeCode = _traineeCode;
             RatedCode = _ratedCode;
         }
-
-
     }
 }

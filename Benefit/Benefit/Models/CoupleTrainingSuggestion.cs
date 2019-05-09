@@ -50,8 +50,6 @@ namespace Benefit.Models
             return dbs.GetSuggestionDetails(SuggestionCode);
         }
 
-
-
         public string CheckActiveSuggestions(int SenderCode,int ReceiverCode)
         {
             DBservices dbs = new DBservices();
@@ -63,7 +61,6 @@ namespace Benefit.Models
             DBservices dbs = new DBservices();
             dbs.CancelSuggestion(SuggestionCode);
         }
-
 
     }
 }

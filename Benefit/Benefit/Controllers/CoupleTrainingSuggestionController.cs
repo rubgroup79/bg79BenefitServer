@@ -16,6 +16,7 @@ namespace Benefit.Controllers
         {
 
         }
+
         [HttpGet]
         [Route("api/SendSuggestion")]
         public string SendSuggestion(int SenderCode, int ReceiverCode)
@@ -39,7 +40,6 @@ namespace Benefit.Controllers
             CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
             return s.GetSuggestions(UserCode,  IsApproved);
         }
-
 
         [HttpGet]
         [Route("api/CheckActiveSuggestions")]
@@ -65,7 +65,5 @@ namespace Benefit.Controllers
             CoupleTraining c = new CoupleTraining();
             return c.GetFutureTrainings(UserCode);
         }
-
-
     }
 }

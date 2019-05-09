@@ -24,7 +24,5 @@ namespace Benefit.Controllers
             return t.SignInTrainer();
         }
       
-
-
     }
 }

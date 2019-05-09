@@ -36,7 +36,7 @@ namespace Benefit.Models
 			Latitude = _latitude;
 			Longitude = _longitude;
 			IsTrainer = _isTrainer;
-	}
+		}
 
         public SuggestionResult()
         {

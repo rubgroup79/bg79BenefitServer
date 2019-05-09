@@ -38,14 +38,11 @@ namespace Benefit.Models
             return dbs.GetLazyTrainers();
         }
 
-
         public List<PrefferedDay> GetPrefferedTrainingDay()
         {
             DBservices dbs = new DBservices();
             return dbs.GetPrefferedTrainingDay();
         }
-
-
 
         public void UpdateToken(string Token, int UserCode)
         {
@@ -53,10 +50,16 @@ namespace Benefit.Models
             dbs.UpdateToken(Token, UserCode);
         }
 
-        //public List<User> SearchPartners(CurrentOnlineTrainee o)
-        //{
-        //    DBservices dbs = new DBservices();
-        //    return dbs.SearchPartners(o);
-        //}
-    }
+		public User ShowProfile(int UserCode)
+		{
+			DBservices dbs = new DBservices();
+			return dbs.ShowProfile(UserCode);
+		}
+
+		//public List<User> SearchPartners(CurrentOnlineTrainee o)
+		//{
+		//    DBservices dbs = new DBservices();
+		//    return dbs.SearchPartners(o);
+		//}
+	}
 }

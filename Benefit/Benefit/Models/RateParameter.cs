@@ -10,13 +10,10 @@ namespace Benefit.Models
         public int ParameterCode { get; set; }
         public string Description { get; set; }
  
-
         public RateParameter(int _parameterCode, string _description)
         {
             ParameterCode = _parameterCode;
             Description = _description;
         }
-
-
     }
 }

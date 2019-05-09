@@ -11,14 +11,11 @@ namespace Benefit.Models
         public int ParameterCode { get; set; }
         public float Rate { get; set; }
  
-
         public ParameterRate(int _ratingCode, int _parameterCode, float _rate)
         {
             RatingCode = _ratingCode;
             ParameterCode = _parameterCode;
             Rate = _rate;
         }
-
-
     }
 }

@@ -23,7 +23,6 @@ namespace Benefit.Controllers
             request.Method = "POST";
             // Create POST data and convert it to a byte array.  
 
-
             var objectToSend = new
             {
                 to = pnd.To,
@@ -99,5 +98,4 @@ namespace Benefit.Controllers
         }
     }
     
-
 }

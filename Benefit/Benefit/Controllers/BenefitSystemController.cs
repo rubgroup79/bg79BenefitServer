@@ -29,7 +29,6 @@ namespace Benefit.Controllers
             return s.CheckIfEmailExists(Email);
         }
         
-
         [HttpPost]
         [Route("api/CheckIfPasswordMatches")]
         public Trainee CheckIfPasswordMatches([FromBody]Trainee t)
@@ -44,9 +43,7 @@ namespace Benefit.Controllers
         {
             BenefitSystem s = new BenefitSystem();
             List<Trainee> tl= s.GetLazyTrainees();
-            return tl;
-            
-         
+            return tl;      
         }
 
         [HttpGet]
@@ -55,10 +52,7 @@ namespace Benefit.Controllers
         {
             BenefitSystem s = new BenefitSystem();
             return s.GetLazyTrainers();
-
         }
-
-
 
         [HttpPost]
         [Route("api/UpdateToken")]
@@ -66,7 +60,6 @@ namespace Benefit.Controllers
         {
             BenefitSystem s = new BenefitSystem();
             s.UpdateToken(Token, UserCode);
-
         }
 
         //returns token for user 
@@ -78,21 +71,26 @@ namespace Benefit.Controllers
             return u.GetToken(UserCode);
         }
 
-
         [HttpGet]
         [Route("api/GetPrefferedDay")]
         public List<PrefferedDay> GetPrefferedTrainingDay()
         {
             BenefitSystem s = new BenefitSystem();
             return s.GetPrefferedTrainingDay();
-
         }
-        //--------------------------------------------------------------------
-        // upload pictures 
-        //--------------------------------------------------------------------
 
+		[HttpGet]
+		[Route("api/ShowProfile")]
+		public User ShowProfile(int UserCode)
+		{
+			BenefitSystem s = new BenefitSystem();
+			return s.ShowProfile(UserCode);
+		}
 
-        [Route("uploadpicture")]
+		//--------------------------------------------------------------------
+		// upload pictures 
+		//--------------------------------------------------------------------
+		[Route("uploadpicture")]
         public Task<HttpResponseMessage> Post()
         {
             string outputForNir = "start---";
@@ -101,6 +99,7 @@ namespace Benefit.Controllers
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
+
             string rootPath = HttpContext.Current.Server.MapPath("~/uploadFiles");
             var provider = new MultipartFileStreamProvider(rootPath);
             var task = Request.Content.ReadAsMultipartAsync(provider).
@@ -147,6 +146,7 @@ namespace Benefit.Controllers
                             outputForNir += " ---here7" + fileFullPath.ToString();
                             savedFilePath.Add(fileFullPath.ToString());
                         }
+
                         catch (Exception ex)
                         {
                             outputForNir += " ---excption=" + ex.Message;
@@ -156,6 +156,7 @@ namespace Benefit.Controllers
 
                     return Request.CreateResponse(HttpStatusCode.Created,savedFilePath[0]);
                 });
+
             return task;
         }
 

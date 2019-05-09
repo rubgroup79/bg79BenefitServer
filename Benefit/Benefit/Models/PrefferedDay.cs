@@ -12,8 +12,6 @@ namespace Benefit.Models
             public string DayName { get; set; }
             public int NumOfTrainings { get; set; }
 
-
-
         public PrefferedDay(int _userCode, string _token, string _dayName, int _numOfTrainings)
         {
             UserCode = _userCode;

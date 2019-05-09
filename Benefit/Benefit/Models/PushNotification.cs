@@ -30,10 +30,6 @@ namespace Benefit.Models
         {
 
         }
-
-
     }
-
-
 
 }

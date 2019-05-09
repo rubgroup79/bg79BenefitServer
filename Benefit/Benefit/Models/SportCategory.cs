@@ -20,7 +20,5 @@ namespace Benefit.Models
             CategoryCode = _categoryCode;
             Description = _description;
         }
-
-
     }
 }

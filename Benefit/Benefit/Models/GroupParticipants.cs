@@ -11,7 +11,6 @@ namespace Benefit.Models
         public int GroupTrainingCode { get; set; }
         public int StatusCode { get; set; }
       
-
         public GroupParticipants(int _userCode, int _groupTrainingCode, int _statusCode=1)
         {
             UserCode = _userCode;

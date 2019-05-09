@@ -42,5 +42,5 @@ namespace Benefit.Models
             dbs.JoinGroup( UserCode, GroupTrainingCode,0);
         }
 
-    }
+	}
 }

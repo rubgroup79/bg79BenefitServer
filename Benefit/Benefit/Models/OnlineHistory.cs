@@ -13,17 +13,14 @@ namespace Benefit.Models
         public float Longitude { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
+
         public OnlineHistory( int _userCode, float _latitude, float _longitude, string _startTime, string _endTime)
-        {
-            
+        {           
             UserCode = _userCode;
             Latitude = _latitude;
             Longitude = _longitude;
             StartTime = _startTime;
             EndTime = _endTime;
-
         }
-
-
     }
 }

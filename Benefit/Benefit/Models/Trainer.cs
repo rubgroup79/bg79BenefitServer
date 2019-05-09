@@ -27,6 +27,5 @@ namespace Benefit.Models
             return UserCode;
         }
 
-
     }
 }

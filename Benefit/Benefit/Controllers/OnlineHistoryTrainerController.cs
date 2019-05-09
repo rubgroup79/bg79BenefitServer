@@ -24,7 +24,5 @@ namespace Benefit.Controllers
             o.InsertOnlineTrainer(o);
         }
 
-        
-
     }
 }

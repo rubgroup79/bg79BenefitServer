@@ -19,12 +19,11 @@ namespace Benefit.Controllers
 
         [HttpPost]
         [Route("api/InsertTrainee")]
-        public int  SignIn([FromBody]Trainee t)
+        public int SignIn([FromBody]Trainee t)
         {
            return t.SignInTrainee();
         }
         
-
         [HttpPost]
         [Route("api/JoinGroup")]
         public void JoinGroup(int UserCode, int GroupTrainingCode)
@@ -32,9 +31,6 @@ namespace Benefit.Controllers
             Trainee t = new Trainee();
             t.JoinGroup(UserCode, GroupTrainingCode);
         }
-
-		
-
 
 	}
 }
