@@ -50,13 +50,13 @@ namespace Benefit.Models
             return dbs.GetSuggestionDetails(SuggestionCode);
         }
 
-        
 
-  //      public void UpdateSuggestionsStatus()
-		//{
-		//	DBservices dbs = new DBservices();
-		//	dbs.UpdateSuggestionsStatus();
-		//}
+
+        public string CheckActiveSuggestions(int SenderCode,int ReceiverCode)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.CheckActiveSuggestions(SenderCode,ReceiverCode);
+        }
 
         public void CancelSuggestion(int SuggestionCode)
         {

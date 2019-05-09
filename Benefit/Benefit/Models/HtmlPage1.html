@@ -162,10 +162,10 @@
             //ajaxCall("POST", "../api/ReplySuggestion?SuggestionCode=1&reply="+"true", "", successSendSuggestion, error);
             //ajaxCall("GET", "../api/GetPendingSuggestions?UserCode=28&Sender=true", "", successSendSuggestion, error);
             //ajaxCall("GET", "../api/GetSuggestionDetails?SuggestionCode=1", "", successSendSuggestion, error);
-
-			ajaxCall("GET", "../api/GetSuggestions?UserCode=2&IsApproved=false", "", successSendSuggestion, error);
+            //ajaxCall("POST", "../api/CancelSuggestion?SuggestionCode=29", "", successSendSuggestion, error);
+			//ajaxCall("GET", "../api/GetSuggestions?UserCode=2&IsApproved=false", "", successSendSuggestion, error);
             //ajaxCall("GET","../api/GetFutureTrainings?UserCode=2", "", successSendSuggestion);
-
+            ajaxCall("GET", "../api/CheckActiveSuggestions?SenderCode=1&ReceiverCode=2", "", successSendSuggestion, error);
         });
 
 

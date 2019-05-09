@@ -39,15 +39,15 @@ namespace Benefit.Controllers
             CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
             return s.GetSuggestions(UserCode,  IsApproved);
         }
-        
 
-		//[HttpPost]
-		//[Route("api/UpdateSuggestionsStatus")]
-		//public void UpdateSuggestionsStatus()
-		//{
-		//	CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
-		//	s.UpdateSuggestionsStatus();
-		//}
+
+        [HttpGet]
+        [Route("api/CheckActiveSuggestions")]
+        public string  CheckActiveSuggestions(int SenderCode, int ReceiverCode)
+        {
+            CoupleTrainingSuggestion s = new CoupleTrainingSuggestion();
+            return s.CheckActiveSuggestions(SenderCode,ReceiverCode);
+        }
 
         [HttpPost]
         [Route("api/CancelSuggestion")]

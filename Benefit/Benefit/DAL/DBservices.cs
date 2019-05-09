@@ -1342,7 +1342,76 @@ public class DBservices
 		}
 	}
 
-	public List<SuggestionResult> GetSuggestions(int UserCode ,bool IsApproved)
+    // בודקת האם יש כבר הצעה מאושרת או ממתינה לאישור או אימון קיים עבור אותם 2 משתשמשים
+    public string CheckActiveSuggestions(int SenderCode, int ReceiverCode)
+    {
+        SqlConnection con = null;
+        SqlConnection con2 = null;
+        SqlCommand cmd1;
+        SqlCommand cmd2;
+        String selectSTR = null;
+        string CheckStr = "Suggestion Sent!";
+  
+        try
+        {
+            con = connect("BenefitConnectionStringName");
+
+
+            selectSTR = "select CTS.SenderCode,CTS.ReceiverCode,CTS.StatusCode" +
+                " from CoupleTrainingSuggestions as CTS" +
+                " where (CTS.SenderCode ="+SenderCode+" and CTS.ReceiverCode = "+ReceiverCode+") or" +
+                " (CTS.SenderCode = " + ReceiverCode + " and CTS.ReceiverCode = " + SenderCode + ") and" +
+                " (CTS.StatusCode = 4 or CTS.StatusCode = 5)";
+            cmd1 = new SqlCommand(selectSTR, con);
+            SqlDataReader dr1 = cmd1.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dr1.Read())
+            {
+                 int Sender= Convert.ToInt32(dr1["SenderCode"]);
+                int Receiver = Convert.ToInt32(dr1["ReceiverCode"]);
+                int StatusCode = Convert.ToInt32(dr1["StatusCode"]);
+                if (Sender == SenderCode && StatusCode == 4) return "You have already sent this user a suggestion. please wait for his response :)";
+                if (Sender == ReceiverCode && StatusCode == 4)  return "This user already sent you a suggestion, you just need to approve it";
+                if (StatusCode == 5) return "You already have an approved suggestion! all you have to do is to chat";
+            }
+            con2 = connect("BenefitConnectionStringName");
+            selectSTR = "select CTS.SuggestionCode" +
+                " from CoupleTrainingSuggestions as CTS inner join CoupleTraining as CT" +
+                " on CTS.SuggestionCode = CT.SuggestionCode" +
+                " where (CTS.SenderCode =" + SenderCode + " and CTS.ReceiverCode = " + ReceiverCode + ") or" +
+                " (CTS.SenderCode = " + ReceiverCode + " and CTS.ReceiverCode = " + SenderCode + ") and" +
+                " CT.StatusCode = 1";
+            cmd2 = new SqlCommand(selectSTR, con2);
+            SqlDataReader dr2 = cmd2.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dr2.Read())
+            {
+                
+             return "You already have a training with this user :)";
+                
+            }
+            SendSuggestion(SenderCode, ReceiverCode);
+            return CheckStr;
+
+        }
+
+
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+
+    public List<SuggestionResult> GetSuggestions(int UserCode ,bool IsApproved)
     {
         UpdateSuggestionsStatus(UserCode);
         SqlConnection con = null;
@@ -1356,6 +1425,7 @@ public class DBservices
         {
             con = connect("BenefitConnectionStringName");
 			
+
 				selectSTR1 = "select distinct CTS.SuggestionCode, CTS.ReceiverCode, CTS.StatusCode, CTS.SendingTime, U.FirstName, U.LastName, U.Gender, U.Picture, DATEDIFF(year, U.DateOfBirth, getdate()) as Age," +
 				"U.IsTrainer" +
 				" from CoupleTrainingSuggestions CTS inner join Users U on CTS.ReceiverCode = U.UserCode" +
